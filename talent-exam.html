@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Documents Download - Bengal Education Development Society</title>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+      <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+      <link rel="stylesheet" href="css/animate.css">
+      
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesheet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="css/magnific-popup.css">
+
+      <link rel="stylesheet" href="css/aos.css">
+
+      <link rel="stylesheet" href="css/ionicons.min.css">
+
+      <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+      <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+      
+      <link rel="stylesheet" href="css/flaticon.css">
+      <link rel="stylesheet" href="css/icomoon.css">
+      <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Overpass', sans-serif;
+        }
+
+        .documents-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+
+        /* Search Container Styles */
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #4facfe;
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* Autocomplete Dropdown Styles */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+            margin-top: -2px;
+        }
+
+        .autocomplete-dropdown.show {
+            display: block;
+            animation: dropdownShow 0.3s ease;
+        }
+
+        @keyframes dropdownShow {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .autocomplete-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f4;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.highlighted {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            font-weight: 500;
+        }
+
+        .autocomplete-item .highlight-text {
+            font-weight: 600;
+        }
+
+        /* Custom Scrollbar for Dropdown */
+        .autocomplete-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .autocomplete-dropdown::-webkit-scrollbar-track {
+            background: #f1f3f4;
+            border-radius: 3px;
+        }
+
+        .autocomplete-dropdown::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 3px;
+        }
+
+        .autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2196f3 0%, #03a9f4 100%);
+        }
+
+        /* No Results Styles */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .no-results-content h3 {
+            color: #6c757d;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .no-results-content p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Enhanced Table Styles */
+
+        .table-container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .documents-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .documents-table thead {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .documents-table th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .documents-table th:first-child {
+            text-align: center;
+            width: 15%;
+        }
+
+        .documents-table th:nth-child(2) {
+            width: 55%;
+        }
+
+        .documents-table th:nth-child(3) {
+            text-align: center;
+            width: 30%;
+        }
+
+        .documents-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .documents-table tbody tr:nth-child(even) {
+            background-color: #f8fafe;
+        }
+
+        .documents-table tbody tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .documents-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #e0e7ff;
+        }
+
+        .serial-no {
+            text-align: center;
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 1.1rem;
+        }
+
+        .document-name {
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 1rem;
+        }
+
+        .download-cell {
+            text-align: center;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+            margin: 2px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+            margin: 2px;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .download-btn:active,
+        .view-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-icon, .view-icon {
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: modalShow 0.3s ease;
+        }
+
+        @keyframes modalShow {
+            from {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .table-container {
+                width: 95%;
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+
+            .search-input {
+                font-size: 1rem;
+                padding: 12px 45px 12px 15px;
+            }
+
+            .search-icon {
+                right: 15px;
+                font-size: 1rem;
+            }
+
+            /* Mobile Autocomplete Styles */
+            .autocomplete-dropdown {
+                max-height: 150px;
+                border-radius: 0 0 12px 12px;
+            }
+
+            .autocomplete-item {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .documents-table {
+                font-size: 0.9rem;
+            }
+
+            .documents-table th,
+            .documents-table td {
+                padding: 12px 8px;
+            }
+
+            .documents-table th {
+                font-size: 0.9rem;
+            }
+
+            .documents-table th:first-child,
+            .serial-no {
+                display: none;
+            }
+
+            .documents-table th:nth-child(2) {
+                width: 60%;
+            }
+
+            .documents-table th:nth-child(3) {
+                width: 40%;
+            }
+
+            .document-name {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .view-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            .no-results {
+                padding: 40px 15px;
+            }
+
+            .no-results-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .no-results-content p {
+                font-size: 1rem;
+            }
+
+            /* Modal Mobile Responsiveness */
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+                margin: 10px;
+            }
+
+            .modal-image {
+                max-height: 60vh;
+            }
+
+            .modal-footer {
+                padding: 15px 10px;
+                gap: 12px;
+            }
+
+            .modal-title {
+                font-size: 1.1rem;
+                line-height: 1.3;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+                max-width: 100%;
+            }
+
+            .modal .download-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-input {
+                font-size: 0.9rem;
+                padding: 10px 40px 10px 12px;
+            }
+
+            .search-icon {
+                right: 12px;
+                font-size: 0.9rem;
+            }
+
+            /* Small Mobile Autocomplete Styles */
+            .autocomplete-dropdown {
+                max-height: 120px;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .autocomplete-item {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
+            .autocomplete-dropdown::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .documents-table th,
+            .documents-table td {
+                padding: 10px 6px;
+            }
+
+            .view-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .view-btn .view-icon {
+                display: none;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .no-results {
+                padding: 30px 10px;
+            }
+
+            .no-results-content h3 {
+                font-size: 1.3rem;
+            }
+
+            .no-results-content p {
+                font-size: 0.9rem;
+            }
+
+            /* Extra Small Mobile Modal Fixes */
+            .modal-content {
+                max-width: 98%;
+                max-height: 98%;
+                margin: 5px;
+            }
+
+            .modal-image {
+                max-height: 50vh;
+            }
+
+            .modal-footer {
+                padding: 12px 8px;
+                gap: 10px;
+            }
+
+            .modal-title {
+                font-size: 1rem;
+                line-height: 1.2;
+                text-align: center;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+                max-width: 100%;
+            }
+
+            .modal .download-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+                width: auto;
+                max-width: 200px;
+            }
+
+            .close-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+                right: 10px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="./img/nav-logo-beds.jpeg" alt="Logo" style="height: 25px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="./documents.html" class="nav-link">Documents</a></li>
+            <li class="nav-item active"><a href="./talent-exam.html" class="nav-link">Talent Exam</a></li>
+            <li class="nav-item"><a href="./gallery.html" class="nav-link">Gallery</a></li>
+            <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            <li class="nav-item"><a href="./donate.html" class="nav-link">Donate</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      <!-- END nav -->
+      
+      <div class="hero-wrap" style="background-image: url('./images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+            <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Documents</span></p>
+              <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Documents Center</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <section class="documents-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8 text-center">
+                    <h2 style="color: #2c3e50; font-size: 2.5rem; font-weight: 700; margin-bottom: 20px;">Talent Search Exam Centers</h2>
+                    <p style="color: #6c757d; font-size: 1.2rem;">Find your designated exam center and download important details</p>
+                </div>
+            </div>
+            
+            <!-- Search Section -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-6">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search Your Center Name Here" autocomplete="off">
+                        <div class="search-icon">
+                            <i class="icon-search"></i>
+                        </div>
+                        <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="table-container">
+                <table class="documents-table" id="centersTable">
+                    <thead>
+                        <tr>
+                            <th>Sl.No.</th>
+                            <th>Center Name</th>
+                            <th>Download Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr data-center="Center Name - 1">
+                            <td class="serial-no">1</td>
+                            <td class="document-name">Center Name - 1</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 2">
+                            <td class="serial-no">2</td>
+                            <td class="document-name">Center Name - 2</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 3">
+                            <td class="serial-no">3</td>
+                            <td class="document-name">Center Name - 3</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 4">
+                            <td class="serial-no">4</td>
+                            <td class="document-name">Center Name - 4</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 5">
+                            <td class="serial-no">5</td>
+                            <td class="document-name">Center Name - 5</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 6">
+                            <td class="serial-no">6</td>
+                            <td class="document-name">Center Name - 6</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 7">
+                            <td class="serial-no">7</td>
+                            <td class="document-name">Center Name - 7</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 8">
+                            <td class="serial-no">8</td>
+                            <td class="document-name">Center Name - 8</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 9">
+                            <td class="serial-no">9</td>
+                            <td class="document-name">Center Name - 9</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-center="Center Name - 10">
+                            <td class="serial-no">10</td>
+                            <td class="document-name">Center Name - 10</td>
+                            <td class="download-cell">
+                                <div class="btn-container">
+                                    <a href="./index.html" class="view-btn">
+                                        <span class="view-icon">📝</span>
+                                        View Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- No Results Message -->
+                <div id="noResults" class="no-results" style="display: none;">
+                    <div class="no-results-content">
+                        <h3>No Centers Found</h3>
+                        <p>No exam centers match your search criteria. Please try a different search term.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="ftco-footer ftco-section img">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-5">
+              <div class="ftco-footer-widget mb-4">
+                <img src="./img/beds-bengali-logo.jpeg" alt="Logo" style="height: 55px; margin-bottom: 15px;">
+                <h2 class="ftco-heading-2">About Us</h2>
+                <p>A Government-registered Non-Governmental Organization (NGO) dedicated to bringing meaningful change in society through education, healthcare, social awareness, and community welfare.</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Site Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./index.html" class="py-2 d-block">Home</a></li>
+                  <li><a href="./about.html" class="py-2 d-block">About</a></li>
+                  <li><a href="./documents.html" class="py-2 d-block">Documents</a></li>
+                  <li><a href="./talent-exam.html" class="py-2 d-block">Talent Exam</a></li>
+                  <li><a href="./gallery.html" class="py-2 d-block">Gallery</a></li>
+                  <li><a href="./donate.html" class="py-2 d-block">Donate</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Plolicy Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./privacy-policy.html" class="py-2 d-block">Privacy Policy</a></li>
+                  <li><a href="./terms-and-conditions.html" class="py-2 d-block">Terms & Conditions</a></li>
+                  <li><a href="./refund-policy.html" class="py-2 d-block">Refund Policy</a></li>
+                  <li><a href="./contact.html" class="py-2 d-block">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Contact Us</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">Bijaynagar, opp. Canara bank, Joshore road, P.S.- Barasat, Kolkata - 700124</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">9875385861 / 8336082361</span></a></li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span class="text">email@email.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p>Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved <a href="https://colorlib.com" target="_blank">.</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <script>
+        let currentDocument = null;
+        let centerNames = [];
+        let currentHighlighted = -1;
+
+        // Initialize center names array from the table
+        function initializeCenterNames() {
+            const table = document.getElementById('centersTable');
+            const rows = table.getElementsByTagName('tr');
+            centerNames = [];
+            
+            // Extract center names from the actual displayed text in document-name class
+            for (let i = 1; i < rows.length; i++) {
+                const documentNameCell = rows[i].querySelector('.document-name');
+                if (documentNameCell) {
+                    centerNames.push(documentNameCell.textContent.trim());
+                }
+            }
+        }
+
+        // Show autocomplete suggestions
+        function showAutocompleteSuggestions(input) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const query = input.value.toLowerCase();
+            
+            // Only show suggestions after 3 characters
+            if (query.length < 3) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            const suggestions = centerNames.filter(name => 
+                name.toLowerCase().includes(query)
+            );
+
+            if (suggestions.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            // Create suggestion items
+            dropdown.innerHTML = '';
+            suggestions.forEach((suggestion, index) => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.setAttribute('data-index', index);
+                
+                // Don't highlight matching text, just show plain text
+                item.textContent = suggestion;
+                
+                // Add click event
+                item.addEventListener('click', function() {
+                    selectSuggestion(suggestion, input);
+                });
+                
+                dropdown.appendChild(item);
+            });
+
+            dropdown.classList.add('show');
+            currentHighlighted = -1;
+        }
+
+        // Select a suggestion
+        function selectSuggestion(suggestion, input) {
+            input.value = suggestion;
+            document.getElementById('autocompleteDropdown').classList.remove('show');
+            searchCenters();
+            input.focus();
+        }
+
+        // Handle keyboard navigation
+        function handleKeyboardNavigation(event, input) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            
+            if (!dropdown.classList.contains('show') || items.length === 0) {
+                return;
+            }
+
+            switch(event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    currentHighlighted = (currentHighlighted + 1) % items.length;
+                    updateHighlight(items);
+                    break;
+                    
+                case 'ArrowUp':
+                    event.preventDefault();
+                    currentHighlighted = currentHighlighted <= 0 ? items.length - 1 : currentHighlighted - 1;
+                    updateHighlight(items);
+                    break;
+                    
+                case 'Enter':
+                    event.preventDefault();
+                    if (currentHighlighted >= 0 && items[currentHighlighted]) {
+                        const suggestion = items[currentHighlighted].textContent;
+                        selectSuggestion(suggestion, input);
+                    }
+                    break;
+                    
+                case 'Escape':
+                    dropdown.classList.remove('show');
+                    currentHighlighted = -1;
+                    break;
+            }
+        }
+
+        // Update highlighted item
+        function updateHighlight(items) {
+            items.forEach((item, index) => {
+                if (index === currentHighlighted) {
+                    item.classList.add('highlighted');
+                } else {
+                    item.classList.remove('highlighted');
+                }
+            });
+        }
+
+        // Hide dropdown when clicking outside
+        function hideDropdownOnClickOutside(event) {
+            const searchContainer = document.querySelector('.search-container');
+            if (!searchContainer.contains(event.target)) {
+                document.getElementById('autocompleteDropdown').classList.remove('show');
+                currentHighlighted = -1;
+            }
+        }
+
+        // Search functionality
+        function searchCenters() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('centersTable');
+            const rows = table.getElementsByTagName('tr');
+            const noResults = document.getElementById('noResults');
+            let visibleRows = 0;
+
+            // Loop through all table rows, except the header
+            for (let i = 1; i < rows.length; i++) {
+                const documentNameCell = rows[i].querySelector('.document-name');
+                if (documentNameCell) {
+                    const centerName = documentNameCell.textContent.trim();
+                    if (centerName.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                        visibleRows++;
+                        // Add animation effect
+                        rows[i].style.opacity = '0';
+                        setTimeout(() => {
+                            rows[i].style.transition = 'opacity 0.3s ease';
+                            rows[i].style.opacity = '1';
+                        }, i * 50);
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+
+            // Show/hide no results message
+            if (visibleRows === 0 && filter !== '') {
+                table.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                table.style.display = 'table';
+                noResults.style.display = 'none';
+            }
+        }
+
+        // Function to view document (opens image in popup)
+        function viewDocument(imagePath, title) {
+            currentDocument = { imagePath, title };
+            
+            document.getElementById('modalImage').src = imagePath;
+            document.getElementById('modalImage').alt = title;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('documentModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('documentModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to download current document from modal
+        function downloadCurrentDocument() {
+            if (currentDocument) {
+                const filename = currentDocument.title.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.jpg';
+                downloadDocument(currentDocument.imagePath, filename);
+            }
+        }
+
+        // Function to download document directly
+        function downloadDocument(imagePath, filename) {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = imagePath;
+            link.download = filename;
+            link.target = '_blank';
+            
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`Downloaded: ${filename} from ${imagePath}`);
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('documentModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Add some smooth animations on page load
+        window.addEventListener('load', function() {
+            const rows = document.querySelectorAll('.documents-table tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    row.style.transition = 'all 0.5s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add search input animation
+            const searchInput = document.getElementById('searchInput');
+            searchInput.style.opacity = '0';
+            searchInput.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                searchInput.style.transition = 'all 0.5s ease';
+                searchInput.style.opacity = '1';
+                searchInput.style.transform = 'translateY(0)';
+            }, 200);
+        });
+
+        // Enhanced search with autocomplete functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize center names
+            initializeCenterNames();
+            
+            const searchInput = document.getElementById('searchInput');
+            
+            // Add input event for real-time search and autocomplete
+            searchInput.addEventListener('input', function() {
+                searchCenters();
+                showAutocompleteSuggestions(this);
+            });
+
+            // Add keyboard navigation
+            searchInput.addEventListener('keydown', function(event) {
+                handleKeyboardNavigation(event, this);
+                
+                // Clear search on Escape key
+                if (event.key === 'Escape' && !document.getElementById('autocompleteDropdown').classList.contains('show')) {
+                    this.value = '';
+                    searchCenters();
+                }
+            });
+
+            // Add focus event to show suggestions if input has 3+ characters
+            searchInput.addEventListener('focus', function() {
+                if (this.value.length >= 3) {
+                    showAutocompleteSuggestions(this);
+                }
+            });
+
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', hideDropdownOnClickOutside);
+        });
+    </script>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="js/google-map.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
