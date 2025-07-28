@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Documents Download - Bengal Education Development Society</title>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+      <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+      <link rel="stylesheet" href="css/animate.css">
+      
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesheet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="css/magnific-popup.css">
+
+      <link rel="stylesheet" href="css/aos.css">
+
+      <link rel="stylesheet" href="css/ionicons.min.css">
+
+      <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+      <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+      
+      <link rel="stylesheet" href="css/flaticon.css">
+      <link rel="stylesheet" href="css/icomoon.css">
+      <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Overpass', sans-serif;
+        }
+
+        .documents-section {
+            padding: 30px 0;
+            background: #f8f9fa;
+        }
+
+        .table-container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .documents-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .documents-table thead {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .documents-table th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .documents-table th:first-child {
+            text-align: center;
+            width: 15%;
+        }
+
+        .documents-table th:nth-child(2) {
+            width: 55%;
+        }
+
+        .documents-table th:nth-child(3) {
+            text-align: center;
+            width: 30%;
+        }
+
+        .documents-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .documents-table tbody tr:nth-child(even) {
+            background-color: #f8fafe;
+        }
+
+        .documents-table tbody tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .documents-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #e0e7ff;
+        }
+
+        .serial-no {
+            text-align: center;
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 1.1rem;
+        }
+
+        .document-name {
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 1rem;
+        }
+
+        .download-cell {
+            text-align: center;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+            margin: 2px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+            margin: 2px;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .download-btn:active,
+        .view-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-icon, .view-icon {
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: modalShow 0.3s ease;
+        }
+
+        @keyframes modalShow {
+            from {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .table-container {
+                width: 95%;
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+
+            .documents-table {
+                font-size: 0.9rem;
+            }
+
+            .documents-table th,
+            .documents-table td {
+                padding: 12px 8px;
+            }
+
+            .documents-table th {
+                font-size: 0.9rem;
+            }
+
+            .documents-table th:first-child,
+            .serial-no {
+                display: none;
+            }
+
+            .documents-table th:nth-child(2) {
+                width: 60%;
+            }
+
+            .documents-table th:nth-child(3) {
+                width: 40%;
+            }
+
+            .document-name {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .download-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            /* Modal Mobile Responsiveness */
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+                margin: 10px;
+            }
+
+            .modal-image {
+                max-height: 60vh;
+            }
+
+            .modal-footer {
+                padding: 15px 10px;
+                gap: 12px;
+            }
+
+            .modal-title {
+                font-size: 1.1rem;
+                line-height: 1.3;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+                max-width: 100%;
+            }
+
+            .modal .download-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .documents-table th,
+            .documents-table td {
+                padding: 10px 6px;
+            }
+
+            .download-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .view-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .download-btn .download-icon,
+            .view-btn .view-icon {
+                display: none;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Extra Small Mobile Modal Fixes */
+            .modal-content {
+                max-width: 98%;
+                max-height: 98%;
+                margin: 5px;
+            }
+
+            .modal-image {
+                max-height: 50vh;
+            }
+
+            .modal-footer {
+                padding: 12px 8px;
+                gap: 10px;
+            }
+
+            .modal-title {
+                font-size: 1rem;
+                line-height: 1.2;
+                text-align: center;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+                max-width: 100%;
+            }
+
+            .modal .download-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+                width: auto;
+                max-width: 200px;
+            }
+
+            .close-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+                right: 10px;
+                top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="./img/nav-logo-beds.jpeg" alt="Logo" style="height: 25px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+            <li class="nav-item active"><a href="./documents.html" class="nav-link">Documents</a></li>
+            <li class="nav-item"><a href="./gallery.html" class="nav-link">Gallery</a></li>
+            <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            <li class="nav-item"><a href="./donate.html" class="nav-link">Donate</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      <!-- END nav -->
+      
+      <div class="hero-wrap" style="background-image: url('./images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+            <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Documents</span></p>
+              <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Documents Center</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <section class="documents-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <h2 class="mb-4">📄 Documents Download</h2>
+            <p>Download important documents, forms and prospectuses for our organization.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="table-container">
+                <table class="documents-table">
+                <thead>
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Document Name</th>
+                        <th>Download Links</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="serial-no">01</td>
+                        <td class="document-name">Exam Center Contact Letter</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Exam Center Contact Letter.jpeg', 'Exam Center Contact Letter')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Exam Center Contact Letter.jpeg', 'Exam-Center-Contact-Letter.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">02</td>
+                        <td class="document-name">Banner Picnic</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Bannar Picnic.jpeg', 'Banner Picnic')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Bannar Picnic.jpeg', 'Banner-Picnic.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">03</td>
+                        <td class="document-name">Marathon Banner</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Marathon Bannar.jpeg', 'Marathon Banner')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Marathon Bannar.jpeg', 'Marathon-Banner.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">04</td>
+                        <td class="document-name">Health Camp & Awareness Banner</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Health Camp & Awareness Bannar.jpeg', 'Health Camp & Awareness Banner')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Health Camp & Awareness Bannar.jpeg', 'Health-Camp-Awareness-Banner.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">05</td>
+                        <td class="document-name">Delegate Picnic</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Deligate Picnic.jpeg', 'Delegate Picnic')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Deligate Picnic.jpeg', 'Delegate-Picnic.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">06</td>
+                        <td class="document-name">Stop THALASSEMIA Banner</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Stop THALASEMIA Bannar.jpeg', 'Stop THALASSEMIA Banner')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Stop THALASEMIA Bannar.jpeg', 'Stop-THALASSEMIA-Banner.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">07</td>
+                        <td class="document-name">Stage Banner Talent Search Award Function</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Stage Bannar Talent Search Award Function.jpeg', 'Stage Banner Talent Search Award Function')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Stage Bannar Talent Search Award Function.jpeg', 'Stage-Banner-Talent-Search-Award-Function.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">08</td>
+                        <td class="document-name">Cover Book BEDS BINAMULLER PATHSALA</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Cover Book BEDS BINAMULLER PATHSALA.jpeg', 'Cover Book BEDS BINAMULLER PATHSALA')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Cover Book BEDS BINAMULLER PATHSALA.jpeg', 'Cover-Book-BEDS-BINAMULLER-PATHSALA.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">09</td>
+                        <td class="document-name">BEDS BINAMULLER PATHSALA Banner</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/BEDS BINAMULLER PATHSALA Bannar.jpeg', 'BEDS BINAMULLER PATHSALA Banner')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/BEDS BINAMULLER PATHSALA Bannar.jpeg', 'BEDS-BINAMULLER-PATHSALA-Banner.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">10</td>
+                        <td class="document-name">Marathon Run Invitation Card</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Marathon Run Invitation Card.jpeg', 'Marathon Run Invitation Card')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Marathon Run Invitation Card.jpeg', 'Marathon-Run-Invitation-Card.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">11</td>
+                        <td class="document-name">BEDS Jewel of Bengal POSTER</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/BEDS Jewel of Bengal POSTER.jpeg', 'BEDS Jewel of Bengal POSTER')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/BEDS Jewel of Bengal POSTER.jpeg', 'BEDS-Jewel-of-Bengal-POSTER.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">12</td>
+                        <td class="document-name">Bengal Talent Search Scholarship Exam 2025 Poster</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Bengal Talent Search Scholarship Exam 2025 Poster.jpeg', 'Bengal Talent Search Scholarship Exam 2025 Poster')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Bengal Talent Search Scholarship Exam 2025 Poster.jpeg', 'Bengal-Talent-Search-Scholarship-Exam-2025-Poster.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">13</td>
+                        <td class="document-name">Invitation Card - Students Award Given Ceremony</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Invitation Card - Students Award Given Ceremony.jpeg', 'Invitation Card - Students Award Given Ceremony')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Invitation Card - Students Award Given Ceremony.jpeg', 'Invitation-Card-Students-Award-Given-Ceremony.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">14</td>
+                        <td class="document-name">Invitation Card Folder</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Invitation Card Folder.jpeg', 'Invitation Card Folder')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Invitation Card Folder.jpeg', 'Invitation-Card-Folder.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">15</td>
+                        <td class="document-name">Save Water Logo</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Save Water Logo.jpeg', 'Save Water Logo')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Save Water Logo.jpeg', 'Save-Water-Logo.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">16</td>
+                        <td class="document-name">Bengal Education Development Society Logo</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Bengal Education Development Society Logo.jpeg', 'Bengal Education Development Society Logo')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Bengal Education Development Society Logo.jpeg', 'Bengal-Education-Development-Society-Logo.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">17</td>
+                        <td class="document-name">Bajj Logo Marathon</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Bajj logo Marathon.jpeg', 'Bajj Logo Marathon')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Bajj logo Marathon.jpeg', 'Bajj-Logo-Marathon.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">18</td>
+                        <td class="document-name">Guest Card THALASSEMIA Program</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Guest Card THALASEMIA Program.jpeg', 'Guest Card THALASSEMIA Program')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Guest Card THALASEMIA Program.jpeg', 'Guest-Card-THALASSEMIA-Program.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">19</td>
+                        <td class="document-name">BEDS BINAMULLER PATHSALA Poster</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/BEDS BINAMULLER PATHSALA Poster.jpeg', 'BEDS BINAMULLER PATHSALA Poster')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/BEDS BINAMULLER PATHSALA Poster.jpeg', 'BEDS-BINAMULLER-PATHSALA-Poster.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="serial-no">20</td>
+                        <td class="document-name">Save Water & BEDS BINAMULLER PATHSALA Poster</td>
+                        <td class="download-cell">
+                            <div class="btn-container">
+                                <button class="view-btn" onclick="viewDocument('./documents/Save Water & BEDS BINAMULLER PATHSALA Poster.jpeg', 'Save Water & BEDS BINAMULLER PATHSALA Poster')">
+                                    <span class="view-icon">📝</span>
+                                    View
+                                </button>
+                                <button class="download-btn" onclick="downloadDocument('./documents/Save Water & BEDS BINAMULLER PATHSALA Poster.jpeg', 'Save-Water-BEDS-BINAMULLER-PATHSALA-Poster.jpeg')">
+                                    <span class="download-icon">⬇️</span>
+                                    Download
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Document Modal -->
+    <div id="documentModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="" class="modal-image">
+            <div class="modal-footer">
+                <div id="modalTitle" class="modal-title"></div>
+                <button class="download-btn" onclick="downloadCurrentDocument()">
+                    <span class="download-icon">⬇️</span>
+                    Download Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ftco-footer ftco-section img">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-5">
+              <div class="ftco-footer-widget mb-4">
+                <img src="./img/beds-bengali-logo.jpeg" alt="Logo" style="height: 55px; margin-bottom: 15px;">
+                <h2 class="ftco-heading-2">About Us</h2>
+                <p>A Government-registered Non-Governmental Organization (NGO) dedicated to bringing meaningful change in society through education, healthcare, social awareness, and community welfare.</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Site Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./index.html" class="py-2 d-block">Home</a></li>
+                  <li><a href="./about.html" class="py-2 d-block">About</a></li>
+                  <li><a href="./documents.html" class="py-2 d-block">Documents</a></li>
+                  <li><a href="./gallery.html" class="py-2 d-block">Gallery</a></li>
+                  <li><a href="./donate.html" class="py-2 d-block">Donate</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Plolicy Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./privacy-policy.html" class="py-2 d-block">Privacy Policy</a></li>
+                  <li><a href="./terms-and-conditions.html" class="py-2 d-block">Terms & Conditions</a></li>
+                  <li><a href="./refund-policy.html" class="py-2 d-block">Refund Policy</a></li>
+                  <li><a href="./contact.html" class="py-2 d-block">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Contact Us</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">Bijaynagar, opp. Canara bank, Joshore road, P.S.- Barasat, Kolkata - 700124</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">9875385861 / 8336082361</span></a></li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span class="text">email@email.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p>Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved <a href="https://colorlib.com" target="_blank">.</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <script>
+        let currentDocument = null;
+
+        // Function to view document (opens image in popup)
+        function viewDocument(imagePath, title) {
+            currentDocument = { imagePath, title };
+            
+            document.getElementById('modalImage').src = imagePath;
+            document.getElementById('modalImage').alt = title;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('documentModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('documentModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Function to download current document from modal
+        function downloadCurrentDocument() {
+            if (currentDocument) {
+                const filename = currentDocument.title.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.jpg';
+                downloadDocument(currentDocument.imagePath, filename);
+            }
+        }
+
+        // Function to download document directly
+        function downloadDocument(imagePath, filename) {
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = imagePath;
+            link.download = filename;
+            link.target = '_blank';
+            
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`Downloaded: ${filename} from ${imagePath}`);
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('documentModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Add some smooth animations on page load
+        window.addEventListener('load', function() {
+            const rows = document.querySelectorAll('.documents-table tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    row.style.transition = 'all 0.5s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="js/google-map.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
