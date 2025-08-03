@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Gallery - Bengal Education Development Society</title>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+
+      <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+      <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+      <link rel="stylesheet" href="css/animate.css">
+      
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesheet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="css/magnific-popup.css">
+
+      <link rel="stylesheet" href="css/aos.css">
+
+      <link rel="stylesheet" href="css/ionicons.min.css">
+
+      <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+      <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+      
+      <link rel="stylesheet" href="css/flaticon.css">
+      <link rel="stylesheet" href="css/icomoon.css">
+      <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Overpass', sans-serif;
+        }
+
+        .gallery-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 100%;
+        }
+
+        .image-box {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+        }
+
+        .image-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .image-box:hover::before {
+            opacity: 1;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .image-box:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .image-box:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: modalShow 0.3s ease;
+        }
+
+        @keyframes modalShow {
+            from {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .download-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .image-box {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .image-box {
+                height: 250px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                margin: 20px;
+            }
+
+            .modal-footer {
+                padding: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 280px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Loading animation for images */
+        .image-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Loading indicator */
+        .loading-indicator {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+            grid-column: 1 / -1;
+        }
+
+        .loading-indicator.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-left: 15px;
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="./img/nav-logo-beds.jpeg" alt="Logo" style="height: 25px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="./documents.html" class="nav-link">Documents</a></li>
+            <li class="nav-item"><a href="./talent-exam.html" class="nav-link">Talent Exam</a></li>
+            <li class="nav-item active"><a href="./gallery.html" class="nav-link">Gallery</a></li>
+            <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            <li class="nav-item"><a href="./donate.html" class="nav-link">Donate</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      <!-- END nav -->
+      
+      <div class="hero-wrap" style="background-image: url('./images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+            <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Gallery</span></p>
+              <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Photo Gallery</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <section class="gallery-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <h2 class="mb-4">Our Photo Gallery</h2>
+            <p>Capturing moments of our community impact and charitable initiatives across West Bengal. A Healthier World, One Step at a Time</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Initial batch of images will be loaded here -->
+            </div>
+            
+            <!-- Loading indicator -->
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading more images...</div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Popup -->
+    <div id="imageModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="" class="modal-image">
+            <div class="modal-footer">
+                <button class="download-btn" onclick="downloadImage()">
+                    <span class="download-icon">⬇️</span>
+                    Download Image
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ftco-footer ftco-section img">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-5">
+              <div class="ftco-footer-widget mb-4">
+                <img src="./img/beds-bengali-logo.jpeg" alt="Logo" style="height: 55px; margin-bottom: 15px;">
+                <h2 class="ftco-heading-2">About Us</h2>
+                <p>A Government-registered Non-Governmental Organization (NGO) dedicated to bringing meaningful change in society through education, healthcare, social awareness, and community welfare.</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Site Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./index.html" class="py-2 d-block">Home</a></li>
+                  <li><a href="./about.html" class="py-2 d-block">About</a></li>
+                  <li><a href="./documents.html" class="py-2 d-block">Documents</a></li>
+                  <li><a href="./talent-exam.html" class="py-2 d-block">Talent Exam</a></li>
+                  <li><a href="./gallery.html" class="py-2 d-block">Gallery</a></li>
+                  <li><a href="./donate.html" class="py-2 d-block">Donate</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Plolicy Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./privacy-policy.html" class="py-2 d-block">Privacy Policy</a></li>
+                  <li><a href="./terms-and-conditions.html" class="py-2 d-block">Terms & Conditions</a></li>
+                  <li><a href="./refund-policy.html" class="py-2 d-block">Refund Policy</a></li>
+                  <li><a href="./contact.html" class="py-2 d-block">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Contact Us</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">Bijaynagar, opp. Canara bank, Joshore road, P.S.- Barasat, Kolkata - 700124</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">9875385861 / 8336082361</span></a></li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span class="text">email@email.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p>Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved <a href="https://colorlib.com" target="_blank">.</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <script>
+        let currentImageIndex = 0;
+        let currentImageSrc = '';
+        let currentBatch = 0;
+        let isLoading = false;
+        let allImagesLoaded = false;
+        
+        // All image paths
+        const allImages = [
+            './gallery/beds_01.jpeg', './gallery/beds_02.jpeg', './gallery/beds_03.jpeg', './gallery/beds_04.jpeg',
+            './gallery/beds_05.jpeg', './gallery/beds_06.jpeg', './gallery/beds_07.jpeg', './gallery/beds_08.jpeg',
+            './gallery/beds_09.jpeg', './gallery/beds_10.jpeg', './gallery/beds_11.jpeg', './gallery/beds_12.jpeg',
+            './gallery/beds_13.jpeg', './gallery/beds_14.jpeg', './gallery/beds_15.jpeg', './gallery/beds_16.jpeg',
+            './gallery/beds_17.jpeg', './gallery/beds_18.jpeg', './gallery/beds_19.jpeg', './gallery/beds_20.jpeg',
+            './gallery/beds_21.jpeg', './gallery/beds_22.jpeg', './gallery/beds_23.jpeg', './gallery/beds_24.jpeg',
+            './gallery/beds_25.jpeg', './gallery/beds_26.jpeg', './gallery/beds_27.jpeg', './gallery/beds_28.jpeg',
+            './gallery/beds_29.jpeg', './gallery/beds_30.jpeg', './gallery/beds_31.jpeg', './gallery/beds_32.jpeg',
+            './gallery/beds_33.jpeg', './gallery/beds_34.jpeg', './gallery/beds_35.jpeg', './gallery/beds_36.jpeg',
+            './gallery/beds_37.jpeg', './gallery/beds_38.jpeg', './gallery/beds_39.jpeg', './gallery/beds_40.jpeg',
+            './gallery/beds_41.jpeg', './gallery/beds_42.jpeg', './gallery/beds_43.jpeg', './gallery/beds_44.jpeg',
+            './gallery/beds_45.jpeg', './gallery/beds_46.jpeg', './gallery/beds_47.jpeg', './gallery/beds_48.jpeg',
+            './gallery/beds_49.jpeg', './gallery/beds_50.jpeg', './gallery/beds_51.jpeg', './gallery/beds_52.jpeg'
+        ];
+
+        const IMAGES_PER_BATCH = 12; // 3 rows of 4 images each
+
+        // Create image element
+        function createImageElement(src, index) {
+            const imageBox = document.createElement('div');
+            imageBox.className = 'image-box image-loading';
+            imageBox.onclick = () => openModal(index);
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `Gallery Image ${index + 1}`;
+            img.loading = 'lazy';
+            
+            img.onload = function() {
+                imageBox.classList.remove('image-loading');
+            };
+
+            img.onerror = function() {
+                imageBox.classList.remove('image-loading');
+                imageBox.style.background = '#f3f4f6';
+                imageBox.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #6b7280;">Image not found</div>';
+            };
+
+            imageBox.appendChild(img);
+            return imageBox;
+        }
+
+        // Load next batch of images
+        function loadNextBatch() {
+            if (isLoading || allImagesLoaded) return;
+
+            const startIndex = currentBatch * IMAGES_PER_BATCH;
+            const endIndex = Math.min(startIndex + IMAGES_PER_BATCH, allImages.length);
+
+            if (startIndex >= allImages.length) {
+                allImagesLoaded = true;
+                return;
+            }
+
+            isLoading = true;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.classList.add('show');
+
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                const galleryGrid = document.getElementById('galleryGrid');
+                
+                for (let i = startIndex; i < endIndex; i++) {
+                    const imageElement = createImageElement(allImages[i], i);
+                    galleryGrid.appendChild(imageElement);
+                }
+
+                currentBatch++;
+                isLoading = false;
+                loadingIndicator.classList.remove('show');
+
+                // Check if all images are loaded
+                if (endIndex >= allImages.length) {
+                    allImagesLoaded = true;
+                }
+            }, 500);
+        }
+
+        // Scroll event handler for infinite scroll
+        function handleScroll() {
+            if (isLoading || allImagesLoaded) return;
+
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            // Load more when user scrolls to 80% of the page
+            if (scrollTop + windowHeight >= documentHeight * 0.8) {
+                loadNextBatch();
+            }
+        }
+
+        // Initialize gallery
+        function initGallery() {
+            // Load first batch immediately
+            loadNextBatch();
+            
+            // Add scroll event listener
+            window.addEventListener('scroll', handleScroll);
+        }
+
+        function openModal(index) {
+            currentImageIndex = index;
+            currentImageSrc = allImages[index];
+            
+            document.getElementById('modalImage').src = currentImageSrc;
+            document.getElementById('modalImage').alt = `Gallery Image ${index + 1}`;
+            
+            document.getElementById('imageModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function downloadImage() {
+            // Generate random 10-digit number
+            const randomNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+            const filename = `BEDS_${randomNumber}.jpeg`;
+            
+            const link = document.createElement('a');
+            link.href = currentImageSrc;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Keyboard navigation for modal
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('imageModal').classList.contains('show')) {
+                const loadedImages = document.querySelectorAll('.image-box').length;
+                
+                if (event.key === 'ArrowLeft') {
+                    const prevIndex = currentImageIndex > 0 ? currentImageIndex - 1 : loadedImages - 1;
+                    if (prevIndex >= 0 && prevIndex < loadedImages) {
+                        openModal(prevIndex);
+                    }
+                } else if (event.key === 'ArrowRight') {
+                    const nextIndex = currentImageIndex < loadedImages - 1 ? currentImageIndex + 1 : 0;
+                    if (nextIndex < loadedImages) {
+                        openModal(nextIndex);
+                    }
+                }
+            }
+        });
+
+        // Initialize gallery when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGallery);
+    </script>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="js/google-map.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

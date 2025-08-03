@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Donations - Bengal Education Development Society</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+    
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css  <script src="js/aos.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Donation Form JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('donationForm');
+        const successMessage = document.getElementById('successMessage');
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('paymentProof');
+        const mobileInput = document.getElementById('mobileNumber');
+
+        // Mobile number formatting
+        mobileInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            e.target.value = value;
+        });
+
+        // File upload area click handler
+        fileUploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // File upload change handler
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                
+                if (!allowedTypes.includes(file.type)) {
+                    showError('paymentProof', 'Please upload a valid file (JPG, PNG, or PDF)');
+                    return;
+                }
+                
+                if (file.size > maxSize) {
+                    showError('paymentProof', 'File size should be less than 5MB');
+                    return;
+                }
+                
+                // Update upload area text
+                const uploadText = fileUploadArea.querySelector('.file-upload-text');
+                uploadText.textContent = `✓ ${file.name} uploaded`;
+                fileUploadArea.style.borderColor = '#27ae60';
+                fileUploadArea.style.backgroundColor = '#d5f4e6';
+                clearError('paymentProof');
+            }
+        });
+
+        // Drag and drop functionality
+        fileUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = '#3498db';
+            fileUploadArea.style.backgroundColor = '#ebf3fd';
+        });
+
+        fileUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = '#bdc3c7';
+            fileUploadArea.style.backgroundColor = '#f8f9fa';
+        });
+
+        fileUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Form validation functions
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const inputElement = document.getElementById(fieldId);
+            
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            if (inputElement) {
+                inputElement.style.borderColor = '#e74c3c';
+            }
+        }
+
+        function clearError(fieldId) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const inputElement = document.getElementById(fieldId);
+            
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+            
+            if (inputElement) {
+                inputElement.style.borderColor = '#bdc3c7';
+            }
+        }
+
+        function validateField(fieldId, validator, errorMessage) {
+            const field = document.getElementById(fieldId);
+            const value = field.value.trim();
+            
+            if (!validator(value)) {
+                showError(fieldId, errorMessage);
+                return false;
+            } else {
+                clearError(fieldId);
+                return true;
+            }
+        }
+
+        // Validation rules
+        const validators = {
+            fullName: (value) => value.length >= 2,
+            mobileNumber: (value) => /^[0-9]{10}$/.test(value),
+            emailId: (value) => value === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+            address: (value) => value.length >= 5,
+            donationAmount: (value) => parseFloat(value) >= 1,
+            paymentProof: () => fileInput.files.length > 0
+        };
+
+        const errorMessages = {
+            fullName: 'Please enter your full name (at least 2 characters)',
+            mobileNumber: 'Please enter a valid 10-digit mobile number',
+            emailId: 'Please enter a valid email address',
+            address: 'Please enter your complete address (at least 5 characters)',
+            donationAmount: 'Please enter a valid donation amount (minimum ₹1)',
+            paymentProof: 'Please upload payment screenshot'
+        };
+
+        // Real-time validation
+        Object.keys(validators).forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('blur', function() {
+                    if (fieldId === 'emailId' && field.value.trim() === '') {
+                        clearError(fieldId);
+                        return;
+                    }
+                    validateField(fieldId, validators[fieldId], errorMessages[fieldId]);
+                });
+
+                field.addEventListener('input', function() {
+                    if (field.style.borderColor === 'rgb(231, 76, 60)') {
+                        clearError(fieldId);
+                    }
+                });
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            
+            // Validate all required fields
+            Object.keys(validators).forEach(fieldId => {
+                if (fieldId === 'emailId') return; // Skip optional email validation
+                
+                if (!validateField(fieldId, validators[fieldId], errorMessages[fieldId])) {
+                    isValid = false;
+                }
+            });
+
+            // Validate email if provided
+            const emailValue = document.getElementById('emailId').value.trim();
+            if (emailValue && !validators.emailId(emailValue)) {
+                showError('emailId', errorMessages.emailId);
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Hide form and show success message
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Optional: Reset form after 5 seconds
+                setTimeout(() => {
+                    form.reset();
+                    form.style.display = 'block';
+                    successMessage.style.display = 'none';
+                    
+                    // Reset file upload area
+                    const uploadText = fileUploadArea.querySelector('.file-upload-text');
+                    uploadText.textContent = '📤 Click to Upload Payment Screenshot';
+                    fileUploadArea.style.borderColor = '#bdc3c7';
+                    fileUploadArea.style.backgroundColor = '#f8f9fa';
+                }, 5000);
+            } else {
+                // Scroll to first error
+                const firstError = document.querySelector('.error-message[style="display: block;"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    });
+  </script>
+    
+  </body>
+</html>  
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Donation Form Specific Styles */
+        .donation-form-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .form-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .form-content {
+            padding: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #28a745;
+            background: white;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .phone-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .country-prefix {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+            display: inline-block;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .phone-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+            font-size: 1rem;
+            background: #fafbfc;
+            transition: all 0.3s ease;
+        }
+
+        .phone-input:focus {
+            outline: none;
+            border-color: #28a745;
+            background: white;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .amount-input-container {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: #28a745;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        .amount-input {
+            padding-left: 35px;
+        }
+
+        .payment-section {
+            background: linear-gradient(135deg, #e8f5e9 0%, #d4edda 100%);
+            border: 2px solid #28a745;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .payment-header {
+            color: #155724;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .payment-details {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-code-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qr-code-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .qr-code-text {
+            color: #495057;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .file-upload-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-input {
+            width: 100%;
+            padding: 40px 20px;
+            border: 2px dashed #28a745;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8fff9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-input:hover {
+            background: #e8f5e9;
+            border-color: #20c997;
+        }
+
+        .file-upload-text {
+            color: #28a745;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .file-upload-subtext {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .hidden-file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: auto;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #17a2b8;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .file-selected {
+            background: #e8f5e9 !important;
+            border-color: #28a745 !important;
+        }
+
+        .file-selected .file-upload-text {
+            color: #155724;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 30px 20px;
+            }
+
+            .form-header {
+                padding: 30px 20px;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .payment-section {
+                padding: 20px;
+            }
+
+            .payment-details {
+                padding: 20px;
+            }
+
+            .submit-button {
+                width: 100%;
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .donation-form-section {
+                padding: 40px 0;
+            }
+
+            .form-container {
+                margin: 0 10px;
+                border-radius: 15px;
+            }
+
+            .form-content {
+                padding: 20px 15px;
+            }
+
+            .form-header {
+                padding: 25px 15px;
+            }
+
+            .form-header h1 {
+                font-size: 1.7rem;
+            }
+
+            .form-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .form-input,
+            .phone-input {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .country-prefix {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .payment-section {
+                padding: 15px;
+            }
+
+            .payment-details {
+                padding: 15px;
+            }
+
+            .submit-button {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+  </head>
+  <body>
+    
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="./img/nav-logo-beds.jpeg" alt="Logo" style="height: 25px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="./about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="./documents.html" class="nav-link">Documents</a></li>
+            <li class="nav-item"><a href="./talent-exam.html" class="nav-link">Talent Exam</a></li>
+            <li class="nav-item"><a href="./gallery.html" class="nav-link">Gallery</a></li>
+            <li class="nav-item"><a href="./contact.html" class="nav-link">Contact</a></li>
+            <li class="nav-item active"><a href="./donate.html" class="nav-link">Donate</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+    
+    <div class="hero-wrap" style="background-image: url('images/bg_6.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+          <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Donate</span></p>
+            <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Donations</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="donation-form-section">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-header">
+                    <div style="margin-bottom: 20px;">
+                        <p style="font-size: 1.1rem; margin: 5px 0; opacity: 0.95; font-weight: 500;">"Give hope, change lives"</p>
+                        <p style="font-size: 1.1rem; margin: 5px 0; opacity: 0.95; font-weight: 500;">"Your kindness makes a difference"</p>
+                    </div>
+                    <h1>Make a Donation</h1>
+                    <h2>Support Bengal Education Development Society</h2>
+                </div>
+
+                <div class="form-content">
+                    <div class="success-message" id="successMessage">
+                        <strong>Thank You!</strong> Your donation details have been submitted successfully. We will contact you soon for confirmation.
+                    </div>
+
+                    <form id="donationForm" novalidate>
+                        <!-- Personal Information -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label required-field" for="fullName">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" class="form-input" required>
+                                <div class="error-message" id="fullNameError">Please enter your full name</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required-field" for="mobileNumber">Mobile Number</label>
+                                <div class="phone-input-container">
+                                    <div class="country-prefix">
+                                        <img src="./img/India_Flag.webp" alt="India Flag" class="flag-icon">
+                                        +91
+                                    </div>
+                                    <input type="tel" id="mobileNumber" name="mobileNumber" class="phone-input" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" required>
+                                </div>
+                                <div class="error-message" id="mobileNumberError">Please enter a valid 10-digit mobile number</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="emailId">Email ID (Optional)</label>
+                                <input type="email" id="emailId" name="emailId" class="form-input" placeholder="your.email@example.com">
+                                <div class="error-message" id="emailIdError">Please enter a valid email address</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required-field" for="donationAmount">Donation Amount</label>
+                                <div class="amount-input-container">
+                                    <span class="currency-symbol">₹</span>
+                                    <input type="number" id="donationAmount" name="donationAmount" class="form-input amount-input" placeholder="Enter amount" min="1" required>
+                                </div>
+                                <div class="error-message" id="donationAmountError">Please enter a valid donation amount</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required-field" for="address">Address</label>
+                            <input type="text" id="address" name="address" class="form-input" placeholder="Enter your complete address" required>
+                            <div class="error-message" id="addressError">Please enter your address</div>
+                        </div>
+
+                        <!-- Payment Section -->
+                        <div class="payment-section">
+                            <div class="payment-header">💰 Payment Information</div>
+                            
+                            <div class="payment-details">
+                                <h4 style="color: #2c3e50; margin-bottom: 20px; text-align: center;">UPI Payment Details</h4>
+                                
+                                <div class="qr-code-section">
+                                    <h5 style="color: #2c3e50; margin-bottom: 15px;">Scan QR Code to Pay</h5>
+                                    <div class="qr-code-container">
+                                        <img src="./img/beds_upi_qr_code.jpeg" alt="UPI QR Code" style="width: 200px; height: 200px; border-radius: 10px; object-fit: cover;">
+                                        <div class="qr-code-text">Scan with any UPI app to donate</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Proof Upload -->
+                        <div class="form-group">
+                            <label class="form-label required-field" for="paymentProof">Payment Screenshot</label>
+                            <div class="file-upload-container">
+                                <div class="file-upload-input" id="fileUploadArea">
+                                    <div class="file-upload-text">📤 Click to Upload Payment Screenshot</div>
+                                    <div class="file-upload-subtext">Supported formats: JPG, PNG, PDF (Max size: 5MB)</div>
+                                    <input type="file" id="paymentProof" name="paymentProof" class="hidden-file-input" accept=".jpg,.jpeg,.png,.pdf" required>
+                                </div>
+                            </div>
+                            <div class="error-message" id="paymentProofError">Please upload payment screenshot</div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button type="submit" class="submit-button">
+                                🎁 Submit Donation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="ftco-footer ftco-section img">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row mb-5">
+            <div class="col-md-5">
+              <div class="ftco-footer-widget mb-4">
+                <img src="./img/beds-bengali-logo.jpeg" alt="Logo" style="height: 55px; margin-bottom: 15px;">
+                <h2 class="ftco-heading-2">About Us</h2>
+                <p>A Government-registered Non-Governmental Organization (NGO) dedicated to bringing meaningful change in society through education, healthcare, social awareness, and community welfare.</p>
+                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                  <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                  <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Site Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./index.html" class="py-2 d-block">Home</a></li>
+                  <li><a href="./about.html" class="py-2 d-block">About</a></li>
+                  <li><a href="./documents.html" class="py-2 d-block">Documents</a></li>
+                  <li><a href="./talent-exam.html" class="py-2 d-block">Talent Exam</a></li>
+                  <li><a href="./gallery.html" class="py-2 d-block">Gallery</a></li>
+                  <li><a href="./donate.html" class="py-2 d-block">Donate</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="ftco-footer-widget mb-4 ml-md-4">
+                <h2 class="ftco-heading-2">Plolicy Pages</h2>
+                <ul class="list-unstyled">
+                  <li><a href="./privacy-policy.html" class="py-2 d-block">Privacy Policy</a></li>
+                  <li><a href="./terms-and-conditions.html" class="py-2 d-block">Terms & Conditions</a></li>
+                  <li><a href="./refund-policy.html" class="py-2 d-block">Refund Policy</a></li>
+                  <li><a href="./contact.html" class="py-2 d-block">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="ftco-footer-widget mb-4">
+                <h2 class="ftco-heading-2">Contact Us</h2>
+                <div class="block-23 mb-3">
+                  <ul>
+                    <li><span class="icon icon-map-marker"></span><span class="text">Bijaynagar, opp. Canara bank, Joshore road, P.S.- Barasat, Kolkata - 700124</span></li>
+                    <li><a href="#"><span class="icon icon-phone"></span><span class="text">9875385861 / 8336082361</span></a></li>
+                    <li><a href="#"><span class="icon icon-envelope"></span><span class="text">email@email.com</span></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p>Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved <a href="https://colorlib.com" target="_blank">.</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map.js"></script>
+  <script src="js/main.js"></script>
+    
+  </body>
+</html>
