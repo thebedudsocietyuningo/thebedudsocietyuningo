@@ -559,7 +559,7 @@
   <script>
     // BEDS Contact Form Automation
     // Replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Web App URL
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxObE26vZ1LP06v2ikevVxrx5RqhNHhQ23nPuoD2nszno7TVX3KJsTPJzmR528hpv1v/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHp7mg6RyUqdIkhhpxF2PXO78USgXMBf2JfPeIeXnvEr9JCgdpG10ET0wrK3kxO_4q/exec';
 
     // Contact Form Handler ONLY
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -587,16 +587,49 @@
             
             console.log('Submitting contact form:', formData);
             
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+            let response, result;
             
-            const result = await response.json();
+            try {
+                // Primary method: Fetch API
+                response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                result = await response.json();
+            } catch (fetchError) {
+                console.warn('Fetch method failed, trying alternative approach:', fetchError);
+                
+                // Fallback method: Try with different content type
+                try {
+                    response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            data: JSON.stringify(formData)
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    result = await response.json();
+                } catch (fallbackError) {
+                    console.error('Both primary and fallback methods failed:', fallbackError);
+                    throw new Error('All submission methods failed');
+                }
+            }
+            
             console.log('Contact form response:', result);
             
             if (result.success) {
@@ -615,13 +648,54 @@
             
         } catch (error) {
             console.error('Contact form error:', error);
-            showNotification('❌ Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
+            
+            // Detailed error handling for different types of errors
+            let errorMessage = '❌ Sorry, there was an error sending your message. ';
+            
+            if (error.message.includes('Failed to fetch') || error.message.includes('CORS') || error.message.includes('blocked')) {
+                errorMessage += 'Network/CORS error detected. Please ensure the Google Apps Script is properly deployed and accessible.';
+            } else if (error.message.includes('JSON')) {
+                errorMessage += 'Response parsing error. Please check the server configuration.';
+            } else {
+                errorMessage += 'Please try again or contact us directly.';
+            }
+            
+            showNotification(errorMessage, 'error');
         } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
         }
     });
+
+    // Alternative submission method using form post (fallback for CORS issues)
+    async function submitWithFormData(formData) {
+        return new Promise((resolve, reject) => {
+            // Create a temporary form
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = APPS_SCRIPT_URL;
+            tempForm.style.display = 'none';
+            
+            // Add data as hidden fields
+            Object.keys(formData).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = typeof formData[key] === 'object' ? JSON.stringify(formData[key]) : formData[key];
+                tempForm.appendChild(input);
+            });
+            
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(tempForm);
+                resolve({ success: true, message: 'Form submitted successfully!' });
+            }, 1000);
+        });
+    }
 
     // Get user IP address
     async function getUserIP() {
@@ -715,7 +789,7 @@
         console.log('Web App URL configured:', APPS_SCRIPT_URL);
         
         // Check if Web App URL is configured
-        if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxObE26vZ1LP06v2ikevVxrx5RqhNHhQ23nPuoD2nszno7TVX3KJsTPJzmR528hpv1v/exec') {
+        if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwHp7mg6RyUqdIkhhpxF2PXO78USgXMBf2JfPeIeXnvEr9JCgdpG10ET0wrK3kxO_4q/exec') {
             console.warn('⚠️ Please configure your Google Apps Script Web App URL in the APPS_SCRIPT_URL variable');
         }
     });
