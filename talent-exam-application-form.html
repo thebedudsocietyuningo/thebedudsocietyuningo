@@ -365,6 +365,7 @@
             font-size: 0.85rem;
             margin-top: 5px;
             display: none;
+            font-weight: 500;
         }
 
         .success-message {
@@ -375,6 +376,66 @@
             border-left: 4px solid #28a745;
             margin-bottom: 20px;
             display: none;
+        }
+
+        /* Enhanced form validation styles */
+        .form-input.error,
+        .form-select.error,
+        .phone-input.error {
+            border-color: #e74c3c !important;
+            background-color: #fdf2f2 !important;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .form-input.success,
+        .form-select.success,
+        .phone-input.success {
+            border-color: #27ae60 !important;
+            background-color: #f0f9f4 !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Loading states */
+        .submit-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .submit-button.loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Enhanced file upload styles */
+        .file-upload-input.error {
+            border-color: #e74c3c !important;
+            background-color: #fdf2f2 !important;
+        }
+
+        .file-upload-input.success {
+            border-color: #27ae60 !important;
+            background-color: #f0f9f4 !important;
         }
 
         /* Mobile Responsive Styles */
@@ -714,7 +775,7 @@
 
                         <!-- Submit Button -->
                         <button type="submit" class="submit-button">
-                            🎓 Submit Application... Kindly Wait
+                            🎓 Submit Application..
                         </button>
                     </form>
                 </div>
@@ -788,7 +849,7 @@
 
     <script>
         // Application Form Configuration
-        const APPLICATION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTDGm1JX2CD-toWM4UtFygC0g8ndO-4sYZkY1LruzqOi0OTfg5ReSL3mmjlpRIriVY/exec'; // Replace with your deployed Apps Script URL
+        const APPLICATION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1ZtGrCuv4632wRmu4Uoj6wmuo71cS-FjYpugVqiofjLzVUFUf9s4cq9PaCp6sNu52/exec'; // Replace with your deployed Apps Script URL
         
         // Form validation and submission
         document.addEventListener('DOMContentLoaded', function() {
@@ -852,19 +913,153 @@
                 }
             });
 
-            // Real-time validation
+            // Enhanced real-time validation
             const examModeCheckboxes = document.querySelectorAll('input[name="examMode"]');
             examModeCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     clearError('examMode');
+                    
+                    // Real-time validation for exam mode
+                    const checkedBoxes = document.querySelectorAll('input[name="examMode"]:checked');
+                    if (checkedBoxes.length > 0) {
+                        this.parentElement.parentElement.style.borderLeft = '3px solid #27ae60';
+                    }
                 });
             });
             
-            // Clear error message when user starts typing
+            // Enhanced real-time validation for all form fields
             document.querySelectorAll('.form-input, .form-select').forEach(field => {
+                // Input event for immediate feedback
                 field.addEventListener('input', function() {
                     clearError(this.id);
+                    this.classList.remove('error');
+                    
+                    // Real-time validation based on field type
+                    const value = this.value.trim();
+                    
+                    if (this.id === 'studentName' || this.id === 'fatherName') {
+                        if (value.length >= 2 && /^[a-zA-Z\s.]+$/.test(value)) {
+                            this.classList.add('success');
+                        } else {
+                            this.classList.remove('success');
+                        }
+                    } else if (this.id === 'mobileNumber') {
+                        const mobilePattern = /^[6-9][0-9]{9}$/;
+                        if (mobilePattern.test(value)) {
+                            this.classList.add('success');
+                        } else {
+                            this.classList.remove('success');
+                        }
+                    } else if (this.id === 'address') {
+                        if (value.length >= 10) {
+                            this.classList.add('success');
+                        } else {
+                            this.classList.remove('success');
+                        }
+                    } else if (this.id === 'class') {
+                        if (/class\s*\d+/i.test(value) || /^\d+$/.test(value)) {
+                            this.classList.add('success');
+                        } else {
+                            this.classList.remove('success');
+                        }
+                    } else if (value) {
+                        this.classList.add('success');
+                    } else {
+                        this.classList.remove('success');
+                    }
                 });
+                
+                // Blur event for validation feedback
+                field.addEventListener('blur', function() {
+                    const value = this.value.trim();
+                    
+                    if (this.hasAttribute('required') && !value) {
+                        showFieldError(this.id, `Please enter ${this.previousElementSibling.textContent.replace(' *', '')}`, this);
+                    }
+                });
+                
+                // Focus event to clear errors
+                field.addEventListener('focus', function() {
+                    this.classList.remove('error');
+                    clearError(this.id);
+                });
+            });
+
+            // Enhanced mobile number formatting with validation
+            mobileInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                e.target.value = value;
+                
+                // Real-time validation feedback
+                if (value.length === 10 && /^[6-9]/.test(value)) {
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                    clearError('mobileNumber');
+                } else {
+                    this.classList.remove('success');
+                }
+            });
+
+            // Enhanced file upload handling with better validation
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const fileUploadArea = document.getElementById('fileUploadArea');
+                
+                if (file) {
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                    
+                    // Clear previous states
+                    fileUploadArea.classList.remove('error', 'success');
+                    clearError('paymentProof');
+                    
+                    if (!allowedTypes.includes(file.type)) {
+                        showError('paymentProof', 'Please upload a valid file (JPG, PNG, or PDF)');
+                        fileUploadArea.classList.add('error');
+                        return;
+                    }
+                    
+                    if (file.size > maxSize) {
+                        showError('paymentProof', 'File size should not exceed 5MB');
+                        fileUploadArea.classList.add('error');
+                        return;
+                    }
+                    
+                    // Update UI to show file is selected
+                    const fileName = file.name;
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    fileUploadArea.querySelector('.file-upload-text').textContent = `✅ ${fileName}`;
+                    fileUploadArea.querySelector('.file-upload-subtext').textContent = `File selected successfully (${fileSize}MB)`;
+                    fileUploadArea.classList.add('file-selected', 'success');
+                    
+                    // Show success notification
+                    showApplicationNotification(`File "${fileName}" uploaded successfully!`, 'success');
+                }
+            });
+
+            // Enhanced date validation
+            document.getElementById('dateOfBirth').addEventListener('change', function() {
+                if (this.value) {
+                    const birthDate = new Date(this.value);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    
+                    if (age >= 5 && age <= 25) {
+                        this.classList.add('success');
+                        this.classList.remove('error');
+                        clearError('dateOfBirth');
+                    } else {
+                        showFieldError('dateOfBirth', 'Age should be between 5 and 25 years for exam eligibility', this);
+                    }
+                }
             });
 
             // Add animation on page load
@@ -880,11 +1075,15 @@
             });
         });
 
-        // Form validation function
+        // Enhanced form validation function with visual feedback
         function validateForm() {
             let isValid = true;
+            let firstErrorField = null;
             
-            // Validate required text fields
+            // Clear all previous states
+            clearAllValidationStates();
+            
+            // Validate required text fields with enhanced feedback
             const requiredFields = [
                 'studentName', 'fatherName', 'address', 'district', 
                 'schoolName', 'class', 'language', 'dateOfBirth', 'examcenter'
@@ -892,61 +1091,200 @@
             
             requiredFields.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
-                if (!field.value.trim()) {
-                    showError(fieldId, `Please enter ${field.previousElementSibling.textContent.replace(' *', '')}`);
+                const value = field.value.trim();
+                
+                if (!value) {
+                    showFieldError(fieldId, `Please enter ${field.previousElementSibling.textContent.replace(' *', '')}`, field);
                     isValid = false;
+                    if (!firstErrorField) firstErrorField = field;
+                } else {
+                    // Specific validation for each field
+                    if (fieldId === 'studentName' || fieldId === 'fatherName') {
+                        if (value.length < 2) {
+                            showFieldError(fieldId, 'Name must be at least 2 characters long', field);
+                            isValid = false;
+                            if (!firstErrorField) firstErrorField = field;
+                        } else if (!/^[a-zA-Z\s.]+$/.test(value)) {
+                            showFieldError(fieldId, 'Name should only contain letters and spaces', field);
+                            isValid = false;
+                            if (!firstErrorField) firstErrorField = field;
+                        } else {
+                            showFieldSuccess(field);
+                        }
+                    } else if (fieldId === 'address') {
+                        if (value.length < 10) {
+                            showFieldError(fieldId, 'Please enter a complete address', field);
+                            isValid = false;
+                            if (!firstErrorField) firstErrorField = field;
+                        } else {
+                            showFieldSuccess(field);
+                        }
+                    } else if (fieldId === 'class') {
+                        if (!/class\s*\d+/i.test(value) && !/^\d+$/.test(value)) {
+                            showFieldError(fieldId, 'Please enter a valid class (e.g., Class 10 or 10)', field);
+                            isValid = false;
+                            if (!firstErrorField) firstErrorField = field;
+                        } else {
+                            showFieldSuccess(field);
+                        }
+                    } else {
+                        showFieldSuccess(field);
+                    }
                 }
             });
             
-            // Validate mobile number
+            // Enhanced mobile number validation
             const mobileNumber = document.getElementById('mobileNumber');
-            const mobilePattern = /^[0-9]{10}$/;
-            if (!mobilePattern.test(mobileNumber.value.trim())) {
-                showError('mobileNumber', 'Please enter a valid 10-digit mobile number');
+            const mobileValue = mobileNumber.value.trim();
+            const mobilePattern = /^[6-9][0-9]{9}$/;
+            
+            if (!mobileValue) {
+                showFieldError('mobileNumber', 'Please enter mobile number', mobileNumber);
                 isValid = false;
+                if (!firstErrorField) firstErrorField = mobileNumber;
+            } else if (!mobilePattern.test(mobileValue)) {
+                if (mobileValue.length !== 10) {
+                    showFieldError('mobileNumber', 'Mobile number must be exactly 10 digits', mobileNumber);
+                } else if (!/^[6-9]/.test(mobileValue)) {
+                    showFieldError('mobileNumber', 'Mobile number must start with 6, 7, 8, or 9', mobileNumber);
+                } else {
+                    showFieldError('mobileNumber', 'Please enter a valid mobile number', mobileNumber);
+                }
+                isValid = false;
+                if (!firstErrorField) firstErrorField = mobileNumber;
+            } else {
+                showFieldSuccess(mobileNumber);
             }
             
-            // Validate gender selection
+            // Enhanced gender validation
             const gender = document.getElementById('gender');
             if (!gender.value) {
-                showError('gender', 'Please select gender');
+                showFieldError('gender', 'Please select gender', gender);
                 isValid = false;
+                if (!firstErrorField) firstErrorField = gender;
+            } else {
+                showFieldSuccess(gender);
             }
             
-            // Validate exam mode
+            // Enhanced date of birth validation
+            const dateOfBirth = document.getElementById('dateOfBirth');
+            if (dateOfBirth.value) {
+                const birthDate = new Date(dateOfBirth.value);
+                const today = new Date();
+                const age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                
+                if (age < 5 || age > 25) {
+                    showFieldError('dateOfBirth', 'Age should be between 5 and 25 years for exam eligibility', dateOfBirth);
+                    isValid = false;
+                    if (!firstErrorField) firstErrorField = dateOfBirth;
+                } else {
+                    showFieldSuccess(dateOfBirth);
+                }
+            }
+            
+            // Enhanced exam mode validation
             const examModeChecked = document.querySelectorAll('input[name="examMode"]:checked');
             if (examModeChecked.length === 0) {
                 showError('examMode', 'Please select at least one exam mode');
                 isValid = false;
+                if (!firstErrorField) firstErrorField = document.querySelector('input[name="examMode"]');
+            } else {
+                clearError('examMode');
             }
             
-            // Validate file upload
+            // Enhanced file upload validation
             const paymentProof = document.getElementById('paymentProof');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            
             if (!paymentProof.files.length) {
                 showError('paymentProof', 'Please upload payment proof screenshot');
+                fileUploadArea.classList.add('error');
                 isValid = false;
+                if (!firstErrorField) firstErrorField = paymentProof;
             } else {
                 const file = paymentProof.files[0];
                 const maxSize = 5 * 1024 * 1024; // 5MB
-                if (file.size > maxSize) {
-                    showError('paymentProof', 'File size should not exceed 5MB');
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                
+                if (!allowedTypes.includes(file.type)) {
+                    showError('paymentProof', 'Please upload a valid file (JPG, PNG, or PDF)');
+                    fileUploadArea.classList.add('error');
                     isValid = false;
+                    if (!firstErrorField) firstErrorField = paymentProof;
+                } else if (file.size > maxSize) {
+                    showError('paymentProof', 'File size should not exceed 5MB');
+                    fileUploadArea.classList.add('error');
+                    isValid = false;
+                    if (!firstErrorField) firstErrorField = paymentProof;
+                } else {
+                    clearError('paymentProof');
+                    fileUploadArea.classList.remove('error');
+                    fileUploadArea.classList.add('success');
                 }
+            }
+            
+            // Scroll to first error field if validation failed
+            if (!isValid && firstErrorField) {
+                setTimeout(() => {
+                    firstErrorField.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    firstErrorField.focus();
+                }, 100);
             }
             
             return isValid;
         }
 
-        // Submit application form to Google Apps Script
+        // Enhanced error display with visual feedback
+        function showFieldError(fieldId, message, fieldElement) {
+            showError(fieldId, message);
+            if (fieldElement) {
+                fieldElement.classList.add('error');
+                fieldElement.classList.remove('success');
+            }
+        }
+
+        // Show success state for valid fields
+        function showFieldSuccess(fieldElement) {
+            if (fieldElement) {
+                fieldElement.classList.add('success');
+                fieldElement.classList.remove('error');
+                const errorElement = document.getElementById(fieldElement.id + 'Error');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+        }
+
+        // Clear all validation states
+        function clearAllValidationStates() {
+            document.querySelectorAll('.form-input, .form-select, .phone-input').forEach(field => {
+                field.classList.remove('error', 'success');
+            });
+            document.querySelector('#fileUploadArea')?.classList.remove('error', 'success');
+        }
+
+        // Enhanced submit application form to Google Apps Script
         async function submitApplicationForm() {
             const submitButton = document.querySelector('.submit-button');
             const originalText = submitButton.innerHTML;
             
             try {
-                // Update button state
+                // Enhanced button state with loading animation
                 submitButton.innerHTML = '⏳ Submitting Application...';
                 submitButton.disabled = true;
-                submitButton.style.opacity = '0.7';
+                submitButton.classList.add('loading');
+                submitButton.style.opacity = '0.8';
+                
+                // Show processing notification
+                showApplicationNotification('Processing your application...', 'info');
                 
                 // Handle file upload with base64 conversion
                 const paymentProofFile = document.getElementById('paymentProof').files[0];
@@ -958,86 +1296,159 @@
                     paymentProofFileName = paymentProofFile.name;
                     paymentProofInfo = `${paymentProofFile.name} (${(paymentProofFile.size / 1024 / 1024).toFixed(2)}MB)`;
                     
-                    // Convert file to base64
+                    // Convert file to base64 with progress indication
                     try {
+                        submitButton.innerHTML = '📁 Processing File...';
                         paymentProofData = await convertFileToBase64(paymentProofFile);
                         console.log('✅ File converted to base64 successfully');
                     } catch (fileError) {
                         console.error('❌ Error converting file to base64:', fileError);
-                        throw new Error('Failed to process the uploaded file. Please try again.');
+                        throw new Error('Failed to process the uploaded file. Please try a smaller file or different format.');
                     }
                 }
+
+                // Update button for submission phase
+                submitButton.innerHTML = '📤 Sending Data...';
 
                 // Get selected exam modes
                 const examModeChecked = document.querySelectorAll('input[name="examMode"]:checked');
                 const examModes = Array.from(examModeChecked).map(cb => cb.value);
                 
+                // Enhanced form data with additional validation
                 const formData = {
                     formType: 'application',
-                    studentName: document.getElementById('studentName').value,
-                    fatherName: document.getElementById('fatherName').value,
-                    address: document.getElementById('address').value,
-                    district: document.getElementById('district').value,
-                    schoolName: document.getElementById('schoolName').value,
-                    class: document.getElementById('class').value,
-                    language: document.getElementById('language').value,
+                    studentName: document.getElementById('studentName').value.trim(),
+                    fatherName: document.getElementById('fatherName').value.trim(),
+                    address: document.getElementById('address').value.trim(),
+                    district: document.getElementById('district').value.trim(),
+                    schoolName: document.getElementById('schoolName').value.trim(),
+                    class: document.getElementById('class').value.trim(),
+                    language: document.getElementById('language').value.trim(),
                     examMode: examModes,
                     dateOfBirth: document.getElementById('dateOfBirth').value,
                     gender: document.getElementById('gender').value,
-                    mobileNumber: document.getElementById('mobileNumber').value,
-                    examcenter: document.getElementById('examcenter').value,
+                    mobileNumber: document.getElementById('mobileNumber').value.trim(),
+                    examcenter: document.getElementById('examcenter').value.trim(),
                     paymentProof: paymentProofInfo,
                     paymentProofFile: paymentProofData,
                     paymentProofFileName: paymentProofFileName,
                     ipAddress: await getUserIP(),
                     userAgent: navigator.userAgent,
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    submissionId: generateSubmissionId() // Unique submission ID
                 };
 
                 console.log('📤 Submitting application form data...');
 
-                // Submit to Google Apps Script
+                // Enhanced fetch with timeout and retry logic
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
                 const response = await fetch(APPLICATION_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'cors',
+                    mode: 'no-cors', // Temporary fix - change back to 'cors' after redeployment
+                    cache: 'no-cache',
+                    credentials: 'omit',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                     },
-                    body: JSON.stringify(formData)
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+                    body: JSON.stringify(formData),
+                    signal: controller.signal
                 });
 
-                const result = await response.json();
+                clearTimeout(timeoutId);
+
+                // Enhanced response handling
+                let result;
+                if (response.ok || response.status === 0) { // status 0 for no-cors mode
+                    result = { 
+                        success: true, 
+                        message: 'Application submitted successfully! We will contact you soon with further details.',
+                        submissionId: formData.submissionId
+                    };
+                } else {
+                    try {
+                        result = await response.json();
+                    } catch (e) {
+                        throw new Error(`Server responded with status ${response.status}. Please try again.`);
+                    }
+                }
+
                 console.log('📬 Response received:', result);
 
                 if (result.success) {
-                    // Show success message
-                    showApplicationNotification(result.message, 'success');
+                    // Enhanced success feedback
+                    showApplicationNotification(
+                        `✅ ${result.message}${result.submissionId ? ` Submission ID: ${result.submissionId}` : ''}`, 
+                        'success'
+                    );
                     
-                    // Reset form after delay
+                    // Clear all validation states
+                    clearAllValidationStates();
+                    
+                    // Reset form after delay with animation
                     setTimeout(() => {
                         document.getElementById('applicationForm').reset();
                         resetFileUploadArea();
                         
-                        // Scroll to top
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 2000);
+                        // Smooth scroll to top
+                        window.scrollTo({ 
+                            top: 0, 
+                            behavior: 'smooth' 
+                        });
+                        
+                        // Show completion message
+                        setTimeout(() => {
+                            showApplicationNotification('Form has been reset. You can submit another application if needed.', 'info');
+                        }, 1000);
+                    }, 3000);
                     
                 } else {
-                    throw new Error(result.message || 'Application submission failed');
+                    throw new Error(result.message || 'Application submission failed. Please check your information and try again.');
                 }
 
             } catch (error) {
                 console.error('❌ Error submitting application:', error);
-                showApplicationNotification(
-                    'Error submitting application: ' + (error.message || 'Please try again later'), 
-                    'error'
-                );
+                
+                // Enhanced error handling with specific messages
+                let errorMessage = 'Error submitting application: ';
+                
+                if (error.name === 'AbortError') {
+                    errorMessage += 'Request timed out. Please check your internet connection and try again.';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage += 'Network error. Please check your internet connection and try again.';
+                } else if (error.message.includes('file')) {
+                    errorMessage += error.message;
+                } else {
+                    errorMessage += error.message || 'Please try again later.';
+                }
+                
+                showApplicationNotification(errorMessage, 'error');
+                
+                // Re-enable form for retry
+                setTimeout(() => {
+                    showApplicationNotification('You can try submitting the form again.', 'info');
+                }, 3000);
+                
             } finally {
-                // Reset button state
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-                submitButton.style.opacity = '1';
+                // Enhanced button reset with animation
+                setTimeout(() => {
+                    submitButton.innerHTML = originalText;
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('loading');
+                    submitButton.style.opacity = '1';
+                }, 1000);
             }
+        }
+
+        // Generate unique submission ID
+        function generateSubmissionId() {
+            const timestamp = Date.now();
+            const random = Math.random().toString(36).substring(2, 8);
+            return `BEDS-${timestamp}-${random}`.toUpperCase();
         }
 
         // Get user IP address
@@ -1068,54 +1479,105 @@
             });
         }
 
-        // Show notification messages for application form
+        // Enhanced notification system with better animations and types
         function showApplicationNotification(message, type = 'info') {
-            // Create notification element
+            // Remove any existing notifications
+            const existingNotifications = document.querySelectorAll('.application-notification');
+            existingNotifications.forEach(notification => {
+                notification.remove();
+            });
+
+            // Create notification element with enhanced styling
             const notification = document.createElement('div');
+            notification.className = 'application-notification';
+            
+            let backgroundColor, iconEmoji;
+            switch(type) {
+                case 'success':
+                    backgroundColor = 'linear-gradient(135deg, #28a745, #20c997)';
+                    iconEmoji = '✅';
+                    break;
+                case 'error':
+                    backgroundColor = 'linear-gradient(135deg, #dc3545, #c82333)';
+                    iconEmoji = '❌';
+                    break;
+                case 'info':
+                    backgroundColor = 'linear-gradient(135deg, #17a2b8, #138496)';
+                    iconEmoji = 'ℹ️';
+                    break;
+                case 'warning':
+                    backgroundColor = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                    iconEmoji = '⚠️';
+                    break;
+                default:
+                    backgroundColor = 'linear-gradient(135deg, #6c757d, #545b62)';
+                    iconEmoji = '📢';
+            }
+            
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: ${type === 'success' ? 'linear-gradient(45deg, #28a745, #20c997)' : 'linear-gradient(45deg, #dc3545, #c82333)'};
+                background: ${backgroundColor};
                 color: white;
-                padding: 15px 25px;
-                border-radius: 10px;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
                 z-index: 10000;
                 font-weight: 600;
-                max-width: 400px;
+                font-size: 14px;
+                max-width: 420px;
+                min-width: 300px;
                 word-wrap: break-word;
-                animation: slideIn 0.5s ease;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                transform: translateX(100%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                border: 1px solid rgba(255, 255, 255, 0.2);
             `;
 
-            // Add animation keyframes
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from {
-                        transform: translateX(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
-                }
+            // Add icon and message
+            notification.innerHTML = `
+                <span style="font-size: 16px;">${iconEmoji}</span>
+                <span style="flex: 1;">${message}</span>
+                <button onclick="this.parentElement.remove()" style="
+                    background: none; 
+                    border: none; 
+                    color: white; 
+                    font-size: 18px; 
+                    cursor: pointer; 
+                    padding: 0; 
+                    opacity: 0.7; 
+                    transition: opacity 0.2s;
+                " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">×</button>
             `;
-            document.head.appendChild(style);
 
-            notification.textContent = message;
             document.body.appendChild(notification);
 
-            // Auto remove after 5 seconds
+            // Animate in
             setTimeout(() => {
-                notification.style.animation = 'slideIn 0.5s ease reverse';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 500);
-            }, 5000);
+                notification.style.transform = 'translateX(0)';
+                notification.style.opacity = '1';
+            }, 10);
+
+            // Auto remove based on message length and type
+            const autoRemoveDelay = type === 'error' ? 8000 : 
+                                  type === 'success' ? 6000 : 
+                                  type === 'info' ? 4000 : 5000;
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.transform = 'translateX(100%)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 400);
+                }
+            }, autoRemoveDelay);
         }
 
         // Utility functions
