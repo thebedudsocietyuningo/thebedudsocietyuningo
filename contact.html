@@ -399,13 +399,16 @@
               <h3>Be a volunteer</h3>
               <form action="#" class="volunter-form" id="volunteerForm">
                 <div class="volunteer-form-group">
-                  <input type="text" class="volunteer-form-control" placeholder="Your Name" required>
+                  <input type="text" name="name" id="volunteer-name" class="volunteer-form-control" placeholder="Your Name" required>
                 </div>
                 <div class="volunteer-form-group">
-                  <input type="email" class="volunteer-form-control" placeholder="Your Email" required>
+                  <input type="email" name="email" id="volunteer-email" class="volunteer-form-control" placeholder="Your Email" required>
                 </div>
                 <div class="volunteer-form-group">
-                  <textarea cols="30" rows="3" class="volunteer-form-control" placeholder="Why do you want to volunteer with us?" required></textarea>
+                  <input type="tel" name="phone" id="volunteer-phone" class="volunteer-form-control" placeholder="Your Phone Number" required>
+                </div>
+                <div class="volunteer-form-group">
+                  <textarea cols="30" rows="3" name="message" id="volunteer-message" class="volunteer-form-control" placeholder="Why do you want to volunteer with us?" required></textarea>
                 </div>
                 <div class="volunteer-form-group">
                   <button type="submit" class="volunteer-submit-btn">Join as Volunteer</button>
@@ -529,17 +532,7 @@
         });
       }
       
-      // Volunteer form submission
-      const volunteerForm = document.getElementById('volunteerForm');
-      if (volunteerForm) {
-        volunteerForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          // Here you would typically send the data to your server
-          alert('Thank you for your interest in volunteering! We will contact you soon.');
-          volunteerForm.reset();
-        });
-      }
+      // Volunteer form submission handled by separate script below
       
       // Add smooth animations to form elements
       const formInputs = document.querySelectorAll('.enhanced-form-control, .volunteer-form-control');
@@ -552,6 +545,205 @@
           this.parentElement.style.transform = 'scale(1)';
         });
       });
+    });
+  </script>
+
+  <!-- BEDS Volunteer Form Automation Script -->
+  <script>
+    // BEDS Volunteer Form Automation
+    // Replace 'YOUR_VOLUNTEER_WEB_APP_URL_HERE' with your actual Google Apps Script Web App URL
+    const VOLUNTEER_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTMZQxpJYqYh8yPe3IGBHXfmMQmCbjrvU-ybHfUx3OgHtFjSMrQAeb4yWFHskY0Oax/exec';
+
+    // Volunteer Form Handler
+    document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = this.querySelector('.volunteer-submit-btn');
+        const originalText = submitBtn.textContent;
+        
+        // Show loading state
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+        
+        try {
+            const formData = {
+                formType: 'volunteer',
+                name: document.getElementById('volunteer-name').value,
+                email: document.getElementById('volunteer-email').value,
+                phone: document.getElementById('volunteer-phone').value,
+                message: document.getElementById('volunteer-message').value,
+                sourcePage: 'contact',
+                ipAddress: await getUserIP(),
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Submitting volunteer form:', formData);
+            
+            let response, result;
+            
+            try {
+                // Primary method: Fetch API
+                response = await fetch(VOLUNTEER_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                result = await response.json();
+            } catch (fetchError) {
+                console.warn('Fetch method failed, trying alternative approach:', fetchError);
+                
+                // Fallback method: Try with different content type
+                try {
+                    response = await fetch(VOLUNTEER_APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            data: JSON.stringify(formData)
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    result = await response.json();
+                } catch (fallbackError) {
+                    console.error('Both primary and fallback methods failed:', fallbackError);
+                    throw new Error('All submission methods failed');
+                }
+            }
+            
+            console.log('Volunteer form response:', result);
+            
+            if (result.success) {
+                // Show success message
+                showVolunteerNotification('✅ ' + result.message, 'success');
+                this.reset(); // Clear form
+                
+                // Add success visual feedback
+                submitBtn.style.background = 'linear-gradient(45deg, #10b981, #059669)';
+                setTimeout(() => {
+                    submitBtn.style.background = '';
+                }, 2000);
+            } else {
+                throw new Error(result.message || 'Unknown error occurred');
+            }
+            
+        } catch (error) {
+            console.error('Volunteer form error:', error);
+            
+            // Detailed error handling for different types of errors
+            let errorMessage = '❌ Sorry, there was an error submitting your volunteer application. ';
+            
+            if (error.message.includes('Failed to fetch') || error.message.includes('CORS') || error.message.includes('blocked')) {
+                errorMessage += 'Network/CORS error detected. Please ensure the Google Apps Script is properly deployed and accessible.';
+            } else if (error.message.includes('JSON')) {
+                errorMessage += 'Response parsing error. Please check the server configuration.';
+            } else {
+                errorMessage += 'Please try again or contact us directly.';
+            }
+            
+            showVolunteerNotification(errorMessage, 'error');
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+        }
+    });
+
+    // Show notification messages for volunteer form
+    function showVolunteerNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: ${type === 'success' ? 'linear-gradient(45deg, #10b981, #059669)' : 'linear-gradient(45deg, #f44336, #e53935)'};
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 10000;
+            font-family: 'Overpass', sans-serif;
+            font-weight: 500;
+            max-width: 350px;
+            word-wrap: break-word;
+            animation: slideInLeft 0.5s ease, slideOutLeft 0.5s ease 4s forwards;
+        `;
+        
+        notification.innerHTML = message;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+
+    // Add notification animations for volunteer form
+    const volunteerStyle = document.createElement('style');
+    volunteerStyle.textContent = `
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutLeft {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(volunteerStyle);
+
+    // Add form validation enhancements for volunteer form
+    document.addEventListener('DOMContentLoaded', function() {
+        const volunteerForm = document.getElementById('volunteerForm');
+        
+        // Add real-time validation feedback for volunteer form
+        function addVolunteerValidationFeedback(form) {
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.checkValidity()) {
+                        this.style.borderColor = '#10b981';
+                        this.style.boxShadow = '0 0 5px rgba(16, 185, 129, 0.3)';
+                    } else {
+                        this.style.borderColor = '#f44336';
+                        this.style.boxShadow = '0 0 5px rgba(244, 67, 54, 0.3)';
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.style.borderColor === 'rgb(244, 67, 54)') {
+                        this.style.borderColor = '';
+                        this.style.boxShadow = '';
+                    }
+                });
+            });
+        }
+        
+        if (volunteerForm) addVolunteerValidationFeedback(volunteerForm);
+        
+        console.log('BEDS Volunteer Form Automation loaded successfully!');
+        console.log('Volunteer Web App URL configured:', VOLUNTEER_APPS_SCRIPT_URL);
+        
+        // Check if Volunteer Web App URL is configured
+        if (VOLUNTEER_APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyTMZQxpJYqYh8yPe3IGBHXfmMQmCbjrvU-ybHfUx3OgHtFjSMrQAeb4yWFHskY0Oax/exec') {
+            console.warn('⚠️ Please configure your Google Apps Script Web App URL in the VOLUNTEER_APPS_SCRIPT_URL variable');
+        }
     });
   </script>
 
