@@ -559,6 +559,7 @@
             background: #fafbfc;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         input[type="date"]:focus {
@@ -566,6 +567,31 @@
             border-color: #4facfe;
             background: white;
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        /* Ensure entire date field is clickable */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            color: transparent;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        /* Keep the calendar icon visible */
+        input[type="date"]::before {
+            content: "📅";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 16px;
         }
 
         /* File selected state */
@@ -695,7 +721,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label required-field" for="dateOfBirth">Date of Birth</label>
-                                <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input" required>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input" 
+                                       placeholder="DD/MM/YYYY"
+                                       title="Select date of birth (Data will be saved in DD/MM/YYYY format)" 
+                                       lang="en-IN" required>
+                                <div class="form-helper-text" style="color: #666; font-size: 12px; margin-top: 4px;">📅 Click to select date • Data saved as DD/MM/YYYY</div>
                                 <div class="error-message" id="dateOfBirthError">Please enter the date of birth</div>
                             </div>
 
@@ -1043,23 +1073,24 @@
             // Enhanced date validation
             document.getElementById('dateOfBirth').addEventListener('change', function() {
                 if (this.value) {
-                    const birthDate = new Date(this.value);
-                    const today = new Date();
-                    const age = today.getFullYear() - birthDate.getFullYear();
-                    const monthDiff = today.getMonth() - birthDate.getMonth();
-                    
-                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                        age--;
-                    }
-                    
-                    if (age >= 5 && age <= 25) {
-                        this.classList.add('success');
-                        this.classList.remove('error');
-                        clearError('dateOfBirth');
-                    } else {
-                        showFieldError('dateOfBirth', 'Age should be between 5 and 25 years for exam eligibility', this);
-                    }
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                    clearError('dateOfBirth');
                 }
+            });
+
+            // Enhanced date field click handling - make entire field clickable
+            document.getElementById('dateOfBirth').addEventListener('click', function() {
+                // Force the date picker to open when clicking anywhere on the field
+                this.showPicker && this.showPicker();
+            });
+
+            // Additional focus event to ensure date picker opens
+            document.getElementById('dateOfBirth').addEventListener('focus', function() {
+                // Some browsers need a slight delay
+                setTimeout(() => {
+                    this.showPicker && this.showPicker();
+                }, 10);
             });
 
             // Add animation on page load
@@ -1169,22 +1200,11 @@
             // Enhanced date of birth validation
             const dateOfBirth = document.getElementById('dateOfBirth');
             if (dateOfBirth.value) {
-                const birthDate = new Date(dateOfBirth.value);
-                const today = new Date();
-                const age = today.getFullYear() - birthDate.getFullYear();
-                const monthDiff = today.getMonth() - birthDate.getMonth();
-                
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                
-                if (age < 5 || age > 25) {
-                    showFieldError('dateOfBirth', 'Age should be between 5 and 25 years for exam eligibility', dateOfBirth);
-                    isValid = false;
-                    if (!firstErrorField) firstErrorField = dateOfBirth;
-                } else {
-                    showFieldSuccess(dateOfBirth);
-                }
+                showFieldSuccess(dateOfBirth);
+            } else {
+                showFieldError('dateOfBirth', 'Please select date of birth', dateOfBirth);
+                isValid = false;
+                if (!firstErrorField) firstErrorField = dateOfBirth;
             }
             
             // Enhanced exam mode validation
