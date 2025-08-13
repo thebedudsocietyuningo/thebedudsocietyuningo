@@ -1325,7 +1325,7 @@
                     class: document.getElementById('class').value.trim(),
                     language: document.getElementById('language').value.trim(),
                     examMode: examModes,
-                    dateOfBirth: document.getElementById('dateOfBirth').value,
+                    dateOfBirth: formatDateForSubmission(document.getElementById('dateOfBirth').value),
                     gender: document.getElementById('gender').value,
                     mobileNumber: document.getElementById('mobileNumber').value.trim(),
                     examcenter: document.getElementById('examcenter').value.trim(),
@@ -1479,6 +1479,21 @@
             });
         }
 
+        // Format date from YYYY-MM-DD to DD/MM/YYYY for submission
+        function formatDateForSubmission(dateValue) {
+            if (!dateValue) return '';
+            
+            try {
+                // dateValue comes in YYYY-MM-DD format from HTML date input
+                const [year, month, day] = dateValue.split('-');
+                // Return in DD/MM/YYYY format
+                return `${day}/${month}/${year}`;
+            } catch (error) {
+                console.warn('Error formatting date:', error);
+                return dateValue; // Return original value if formatting fails
+            }
+        }
+
         // Enhanced notification system with better animations and types
         function showApplicationNotification(message, type = 'info') {
             // Remove any existing notifications
@@ -1629,4 +1644,3 @@
     <script src="js/main.js"></script>
 </body>
 </html>
-
