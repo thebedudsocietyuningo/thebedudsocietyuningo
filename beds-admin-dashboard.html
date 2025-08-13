@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BEDS Admin Dashboard - Bengal Education Development Society</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+    
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+      /* Admin Dashboard Styling */
+      body {
+        font-family: 'Overpass', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .dashboard-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        margin: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        min-height: calc(100vh - 40px);
+      }
+      
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .logo-section a {
+        display: inline-block;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+      }
+      
+      .logo-section a:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+      
+      .logo-section img {
+        height: 50px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      
+      .dashboard-title {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      
+      .back-to-home-btn {
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .back-to-home-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(76, 175, 80, 0.4);
+        color: white;
+        text-decoration: none;
+      }
+      
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+      
+      .response-block {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        animation: bounce 2s ease-in-out infinite;
+      }
+      
+      .response-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--block-color, #4a90e2), var(--block-color-light, #7bb3f0));
+      }
+      
+      .response-block:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+        color: inherit;
+        animation-play-state: paused;
+      }
+      
+      .exam-center-block {
+        --block-color: #8E44AD;
+        --block-color-light: #BB8FCE;
+      }
+      
+      .contact-block {
+        --block-color: #FF6B6B;
+        --block-color-light: #FF8E8E;
+      }
+      
+      .volunteer-block {
+        --block-color: #4ECDC4;
+        --block-color-light: #7EDDD6;
+      }
+      
+      .donation-block {
+        --block-color: #45B7D1;
+        --block-color-light: #6BC5DA;
+      }
+      
+      .talent-block {
+        --block-color: #96CEB4;
+        --block-color-light: #B8D8C7;
+      }
+      
+      .block-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--block-color), var(--block-color-light));
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+      
+      .block-icon i {
+        font-size: 1.8rem;
+        color: white;
+      }
+      
+      .block-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 12px;
+      }
+      
+      .block-description {
+        color: #6c757d;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      
+      .block-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .view-details {
+        background: linear-gradient(135deg, var(--block-color), var(--block-color-light));
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+      }
+      
+      .view-details:hover {
+        transform: translateX(5px);
+      }
+      
+      .copyright-section {
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 40px;
+      }
+      
+      .copyright-text {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .dashboard-container {
+          margin: 10px;
+          padding: 20px;
+        }
+        
+        .header-section {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .dashboard-title {
+          font-size: 1.5rem;
+        }
+        
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        
+        .response-block {
+          padding: 20px;
+        }
+        
+        .block-title {
+          font-size: 1.2rem;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .logo-section {
+          flex-direction: column;
+        }
+        
+        .dashboard-title {
+          font-size: 1.3rem;
+        }
+        
+        .back-to-home-btn {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+      }
+      
+      /* Animation Effects */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-8px);
+        }
+        60% {
+          transform: translateY(-4px);
+        }
+      }
+      
+      .response-block {
+        animation: fadeInUp 0.6s ease forwards, bounce 3s ease-in-out infinite;
+      }
+      
+      .response-block:nth-child(1) { 
+        animation-delay: 0.1s, 0.5s;
+      }
+      .response-block:nth-child(2) { 
+        animation-delay: 0.2s, 1s;
+      }
+      .response-block:nth-child(3) { 
+        animation-delay: 0.3s, 1.5s;
+      }
+      .response-block:nth-child(4) { 
+        animation-delay: 0.4s, 2s;
+      }
+      .response-block:nth-child(5) { 
+        animation-delay: 0.5s, 2.5s;
+      }
+      
+      /* Floating Elements */
+      .floating-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      
+      .floating-element {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      .floating-element:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      
+      .floating-element:nth-child(2) {
+        width: 60px;
+        height: 60px;
+        top: 60%;
+        right: 10%;
+        animation-delay: 2s;
+      }
+      
+      .floating-element:nth-child(3) {
+        width: 100px;
+        height: 100px;
+        bottom: 20%;
+        left: 15%;
+        animation-delay: 4s;
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- Floating Background Elements -->
+      <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+      </div>
+      
+      <!-- Header Section -->
+      <div class="header-section">
+        <div class="logo-section">
+          <a href="index.html">
+            <img src="./img/nav-logo-beds.jpeg" alt="BEDS Logo">
+          </a>
+          <h1 class="dashboard-title">BEDS Admin Dashboard</h1>
+        </div>
+        <a href="index.html" class="back-to-home-btn">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+      </div>
+      
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Exam Center Details Block -->
+        <a href="./beds-admin-exam-center-details.html" class="response-block exam-center-block">
+          <div class="block-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h3 class="block-title">Exam Center Details</h3>
+          <p class="block-description">
+            Manage details and files regarding Bengal Talent Search Scholarship Exam Centers, including Center locations, facilities, and administrative information.
+          </p>
+          <div class="block-stats">
+            <button class="view-details">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </a>
+        
+        <!-- Contact Responses Block -->
+        <a href="https://docs.google.com/spreadsheets/d/1WYWoL2w2-gWOzRgBw0c3UuXd9RRpSQHbPkFMCRoOUvA/edit?usp=sharing" class="response-block contact-block">
+          <div class="block-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3 class="block-title">Contact Responses</h3>
+          <p class="block-description">
+            Manage and review all contact form submissions from website visitors, including inquiries, feedback, and general communications.
+          </p>
+          <div class="block-stats">
+            <button class="view-details">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </a>
+        
+        <!-- Volunteer Responses Block -->
+        <a href="https://docs.google.com/spreadsheets/d/1q0bGR-Sti0niUME-2nm72F5Kl5KE9JmGV0xrjzzLQaY/edit?usp=sharing" class="response-block volunteer-block">
+          <div class="block-icon">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <h3 class="block-title">Volunteer Responses</h3>
+          <p class="block-description">
+            Review volunteer applications and manage recruitment processes for various BEDS programs and community initiatives.
+          </p>
+          <div class="block-stats">
+            <button class="view-details">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </a>
+        
+        <!-- Donation Responses Block -->
+        <a href="https://docs.google.com/spreadsheets/d/1EL0UpLq9U8QW2iqrCpn7oXfn6n7zDnjDgFewcpl7yI4/edit?usp=sharing" class="response-block donation-block">
+          <div class="block-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="block-title">Donation Responses</h3>
+          <p class="block-description">
+            Track and manage donation records, contributor information, and financial contributions to support BEDS activities.
+          </p>
+          <div class="block-stats">
+            <button class="view-details">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </a>
+        
+        <!-- Talent Exam Applications Block -->
+        <a href="https://docs.google.com/spreadsheets/d/1bmErPKi3Cvw2gGNxqttgxP8P4BXHXRJe2wSvej7_21E/edit?usp=sharing" class="response-block talent-block">
+          <div class="block-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3 class="block-title">Talent Exam Applications</h3>
+          <p class="block-description">
+            Process and review applications for the Bengal Talent Search Scholarship Exam and manage student registration data.
+          </p>
+          <div class="block-stats">
+            <button class="view-details">
+              View Details <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Copyright Section -->
+      <div class="copyright-section">
+        <p class="copyright-text">
+          Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved
+        </p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+      // Dashboard Interactions
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effects to response blocks
+        const responseBlocks = document.querySelectorAll('.response-block');
+        
+        responseBlocks.forEach(block => {
+          block.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+          });
+          
+          block.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+          });
+        });
+        
+        // Add click tracking for analytics
+        responseBlocks.forEach(block => {
+          block.addEventListener('click', function(e) {
+            const blockType = this.classList.contains('exam-center-block') ? 'Exam center' :
+                            this.classList.contains('contact-block') ? 'Contact' :
+                            this.classList.contains('volunteer-block') ? 'Volunteer' :
+                            this.classList.contains('donation-block') ? 'Donation' :
+                            'Talent Exam';
+            
+            console.log(`Dashboard: ${blockType} block clicked`);
+            
+            // Add a subtle feedback animation
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+              this.style.transform = '';
+            }, 150);
+          });
+        });
+        
+        // Back to home button interaction
+        const backButton = document.querySelector('.back-to-home-btn');
+        backButton.addEventListener('click', function(e) {
+          console.log('Dashboard: Back to Home clicked');
+        });
+      });
+    </script>
+  </body>
+</html>

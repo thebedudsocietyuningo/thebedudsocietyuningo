@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Exam Center Details - BEDS Admin Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="./img/logo.ico">
+    
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+      /* Exam Center Details Dashboard Styling */
+      html {
+        overflow-x: hidden;
+      }
+      
+      body {
+        font-family: 'Overpass', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      
+      .dashboard-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        margin: 20px;
+        padding: 0;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        min-height: calc(100vh - 40px);
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .logo-section a {
+        display: inline-block;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+      }
+      
+      .logo-section a:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+      
+      .logo-section img {
+        height: 50px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      
+      .dashboard-title {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      
+      .header-buttons {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+      
+      .back-to-dashboard-btn {
+        background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .back-to-home-btn {
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .back-to-dashboard-btn:hover,
+      .back-to-home-btn:hover {
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+      }
+      
+      .back-to-dashboard-btn:hover {
+        box-shadow: 0 12px 24px rgba(255, 107, 107, 0.4);
+      }
+      
+      .back-to-home-btn:hover {
+        box-shadow: 0 12px 24px rgba(76, 175, 80, 0.4);
+      }
+      
+      .main-content {
+        flex: 1;
+        padding: 15px;
+        overflow: hidden;
+      }
+      
+      .page-title-section {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      
+      .page-title {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      
+      .page-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.2rem;
+        margin: 0;
+      }
+      
+      .search-section {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+        border-radius: 20px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(142, 68, 173, 0.1);
+        border: 1px solid rgba(142, 68, 173, 0.2);
+        position: relative;
+        overflow: visible;
+        z-index: 1000;
+      }
+      
+      .search-container {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto;
+        z-index: 1001;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 15px 50px 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 1) 100%);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08), inset 0 1px 3px rgba(142, 68, 173, 0.1);
+        color: #2c3e50;
+        font-weight: 500;
+      }
+      
+      .search-input::placeholder {
+        color: #8E44AD;
+        font-weight: 400;
+        opacity: 0.7;
+      }
+      
+      .search-input:focus {
+        outline: none;
+        border-color: #8E44AD;
+        box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.15), 0 8px 25px rgba(142, 68, 173, 0.2);
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(240, 230, 245, 0.3) 100%);
+      }
+      
+      .search-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8E44AD;
+        font-size: 1.2rem;
+        background: linear-gradient(135deg, #8E44AD 0%, #BB8FCE 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 1px 2px rgba(142, 68, 173, 0.3));
+      }
+      
+      /* Autocomplete Dropdown Styles */
+      .autocomplete-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 1) 100%);
+        border: 2px solid rgba(142, 68, 173, 0.3);
+        border-top: none;
+        border-radius: 0 0 25px 25px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(142, 68, 173, 0.2);
+        z-index: 9999;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        margin-top: -2px;
+      }
+      
+      .autocomplete-dropdown.show {
+        display: block;
+        animation: dropdownShow 0.3s ease;
+      }
+      
+      @keyframes dropdownShow {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .autocomplete-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #f1f3f4;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        color: #2c3e50;
+      }
+      
+      .autocomplete-item:last-child {
+        border-bottom: none;
+        border-radius: 0 0 23px 23px;
+      }
+      
+      .autocomplete-item:hover,
+      .autocomplete-item.highlighted {
+        background: linear-gradient(135deg, rgba(232, 213, 240, 1) 0%, rgba(209, 196, 233, 0.8) 100%);
+        color: #8E44AD;
+        font-weight: 500;
+        box-shadow: inset 0 1px 3px rgba(142, 68, 173, 0.15);
+      }
+      
+      .autocomplete-item .highlight-text {
+        font-weight: 600;
+        color: #8E44AD;
+      }
+      
+      /* Custom Scrollbar for Dropdown */
+      .autocomplete-dropdown::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      .autocomplete-dropdown::-webkit-scrollbar-track {
+        background: #f1f3f4;
+        border-radius: 3px;
+      }
+      
+      .autocomplete-dropdown::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #8E44AD 0%, #BB8FCE 100%);
+        border-radius: 3px;
+      }
+      
+      .autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+      }
+      
+      .table-section {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+      }
+      
+      .table-container {
+        width: 100%;
+        overflow-x: auto;
+      }
+      
+      .documents-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      .documents-table thead {
+        background: linear-gradient(135deg, #8E44AD 0%, #BB8FCE 100%);
+        color: white;
+      }
+      
+      .documents-table th {
+        padding: 20px 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+      }
+      
+      .documents-table th:first-child {
+        text-align: center;
+        width: 15%;
+      }
+      
+      .documents-table th:nth-child(2) {
+        width: 55%;
+      }
+      
+      .documents-table th:nth-child(3) {
+        text-align: center;
+        width: 30%;
+      }
+      
+      .documents-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      .documents-table tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+      
+      .documents-table tbody tr:hover {
+        background-color: #e3f2fd;
+        transform: scale(1.01);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .documents-table td {
+        padding: 18px 15px;
+        border: none;
+      }
+      
+      .serial-no {
+        text-align: center;
+        font-weight: 600;
+        color: #8E44AD;
+        font-size: 1.1rem;
+      }
+      
+      .document-name {
+        font-weight: 500;
+        color: #1f2937;
+        font-size: 1.1rem;
+      }
+      
+      .download-cell {
+        text-align: center;
+      }
+      
+      .modify-btn {
+        background: linear-gradient(135deg, #8E44AD 0%, #BB8FCE 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 5px 15px rgba(142, 68, 173, 0.3);
+      }
+      
+      .modify-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(142, 68, 173, 0.4);
+        color: white;
+        text-decoration: none;
+      }
+      
+      .modify-icon {
+        font-size: 1rem;
+      }
+      
+      .no-results {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+        font-size: 1.1rem;
+        display: none;
+      }
+      
+      .copyright-section {
+        text-align: center;
+        padding: 20px 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .copyright-text {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .dashboard-container {
+          margin: 10px;
+          border-radius: 15px;
+        }
+        
+        .header-section {
+          flex-direction: column;
+          text-align: center;
+          padding: 20px;
+        }
+        
+        .header-buttons {
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+        }
+        
+        .dashboard-title {
+          font-size: 1.5rem;
+        }
+        
+        .page-title {
+          font-size: 2rem;
+        }
+        
+        .main-content {
+          padding: 20px;
+        }
+        
+        .search-section,
+        .table-section {
+          padding: 20px;
+        }
+        
+        .documents-table th,
+        .documents-table td {
+          padding: 12px 8px;
+          font-size: 0.9rem;
+        }
+        
+        .documents-table th:first-child,
+        .documents-table th:nth-child(3) {
+          width: 20%;
+        }
+        
+        .documents-table th:nth-child(2) {
+          width: 60%;
+        }
+        
+        .modify-btn {
+          padding: 8px 15px;
+          font-size: 0.8rem;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .back-to-dashboard-btn,
+        .back-to-home-btn {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+        
+        .page-title {
+          font-size: 1.8rem;
+        }
+        
+        .search-input {
+          padding: 12px 45px 12px 15px;
+          font-size: 1rem;
+        }
+        
+        .documents-table th,
+        .documents-table td {
+          padding: 10px 5px;
+          font-size: 0.8rem;
+        }
+      }
+      
+      /* Floating Elements */
+      .floating-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      
+      .floating-element {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      .floating-element:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      
+      .floating-element:nth-child(2) {
+        width: 60px;
+        height: 60px;
+        top: 60%;
+        right: 10%;
+        animation-delay: 2s;
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- Floating Background Elements -->
+      <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+      </div>
+      
+      <!-- Header Section -->
+      <div class="header-section">
+        <div class="logo-section">
+          <a href="index.html">
+            <img src="./img/nav-logo-beds.jpeg" alt="BEDS Logo">
+          </a>
+          <h1 class="dashboard-title">Exam Center Details</h1>
+        </div>
+        <div class="header-buttons">
+          <a href="beds-admin-dashboard.html" class="back-to-dashboard-btn">
+            <i class="fas fa-tachometer-alt"></i>
+            Back to Dashboard
+          </a>
+          <a href="index.html" class="back-to-home-btn">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </a>
+        </div>
+      </div>
+      
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Page Title Section -->
+        <div class="page-title-section">
+          <h2 class="page-title">Bengal Talent Search Scholarship Exam Centers</h2>
+          <p class="page-subtitle">Modify and manage exam Center details and files</p>
+        </div>
+        
+        <!-- Search Section -->
+        <div class="search-section">
+          <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search Your Center Name Here" autocomplete="off">
+            <div class="search-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+          </div>
+        </div>
+        
+        <!-- Table Section -->
+        <div class="table-section">
+          <div class="table-container">
+            <table class="documents-table" id="centersTable">
+              <thead>
+                <tr>
+                  <th>Sl. No.</th>
+                  <th>Center Name</th>
+                  <th>Modify Center Details</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr data-center="center Name - 1">
+                  <td class="serial-no">1</td>
+                  <td class="document-name">Center Name - 1</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1BRouC0OzkMMVgz1RPA0BQvPZtblI6JbQ?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 2">
+                  <td class="serial-no">2</td>
+                  <td class="document-name">Center Name - 2</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1iZ_sehAuJvVGPJm4Gi523Oq5blv-YfXa?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 3">
+                  <td class="serial-no">3</td>
+                  <td class="document-name">Center Name - 3</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1zlstXn4mgTr_oZpxRHUdVJaNg3iJWFhn?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 4">
+                  <td class="serial-no">4</td>
+                  <td class="document-name">Center Name - 4</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1Emygc9fMAnLt1HyoIZFJ9u7c0KCPlkJ1?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 5">
+                  <td class="serial-no">5</td>
+                  <td class="document-name">Center Name - 5</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1aKS__TxN1l_3_i5dKPFqs-Lvujq69Nc-?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 6">
+                  <td class="serial-no">6</td>
+                  <td class="document-name">Center Name - 6</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1tCeACb2EEQ2rbizyZMLRnk8t1-e8Sw8r?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 7">
+                  <td class="serial-no">7</td>
+                  <td class="document-name">Center Name - 7</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/1wJ4MQeZKg68UAZ-_iMPy3mdvxbs6Fyd8?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 8">
+                  <td class="serial-no">8</td>
+                  <td class="document-name">Center Name - 8</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/13W9HCW9rfsgfyu9WAMgXseBRk2ldJfqd?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 9">
+                  <td class="serial-no">9</td>
+                  <td class="document-name">Center Name - 9</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/17jWUWmVp6Uv7Dbcx9ApAqN0i4lmcSSrU?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+                <tr data-center="center Name - 10">
+                  <td class="serial-no">10</td>
+                  <td class="document-name">Center Name - 10</td>
+                  <td class="download-cell">
+                    <a href="https://drive.google.com/drive/folders/14VkTLt5N8ycN0Kp41YSIJ6yQc21Mn9qP?usp=sharing" class="modify-btn">
+                      <i class="fas fa-edit modify-icon"></i>
+                      Modify Details
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="no-results" id="noResults">
+              <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; color: #ccc;"></i>
+              <p>No exam centers found matching your search.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Copyright Section -->
+      <div class="copyright-section">
+        <p class="copyright-text">
+          Bengal Education Development Society &copy;<script>document.write(new Date().getFullYear());</script> | All rights reserved
+        </p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+      // Exam Center Details Functionality
+      let centerNames = [];
+      let currentHighlighted = -1;
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('tableBody');
+        const noResults = document.getElementById('noResults');
+        const centersTable = document.getElementById('centersTable');
+        
+        // Initialize Center names from table
+        initializecenterNames();
+        
+        // Search functionality with autocomplete
+        function performSearch() {
+          const searchTerm = searchInput.value.toLowerCase().trim();
+          const rows = tableBody.querySelectorAll('tr');
+          let visibleRows = 0;
+          
+          rows.forEach(row => {
+            const centerName = row.querySelector('.document-name').textContent.toLowerCase();
+            const serialNo = row.querySelector('.serial-no').textContent.toLowerCase();
+            
+            if (centerName.includes(searchTerm) || serialNo.includes(searchTerm)) {
+              row.style.display = '';
+              visibleRows++;
+            } else {
+              row.style.display = 'none';
+            }
+          });
+          
+          // Show/hide no results message
+          if (visibleRows === 0 && searchTerm !== '') {
+            centersTable.style.display = 'none';
+            noResults.style.display = 'block';
+          } else {
+            centersTable.style.display = 'table';
+            noResults.style.display = 'none';
+          }
+          
+          console.log(`Search performed for: "${searchTerm}", ${visibleRows} results found`);
+        }
+        
+        // Initialize center names from table
+        function initializecenterNames() {
+          const table = document.getElementById('centersTable');
+          const rows = table.getElementsByTagName('tr');
+          centerNames = [];
+          
+          // Extract Center Names from the actual displayed text in document-name class
+          for (let i = 1; i < rows.length; i++) {
+            const documentNameCell = rows[i].querySelector('.document-name');
+            if (documentNameCell) {
+              centerNames.push(documentNameCell.textContent.trim());
+            }
+          }
+          console.log('Initialized Center names:', centerNames);
+        }
+        
+        // Show autocomplete suggestions
+        function showAutocompleteSuggestions(input) {
+          const dropdown = document.getElementById('autocompleteDropdown');
+          const query = input.value.toLowerCase();
+          
+          // Only show suggestions after 3 characters
+          if (query.length < 3) {
+            dropdown.classList.remove('show');
+            return;
+          }
+
+          const suggestions = centerNames.filter(name => 
+            name.toLowerCase().includes(query)
+          );
+
+          if (suggestions.length === 0) {
+            dropdown.classList.remove('show');
+            return;
+          }
+
+          // Create suggestion items
+          dropdown.innerHTML = '';
+          suggestions.forEach((suggestion, index) => {
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            item.setAttribute('data-index', index);
+            
+            // Highlight matching text
+            const regex = new RegExp(`(${query})`, 'gi');
+            const highlightedText = suggestion.replace(regex, '<span class="highlight-text">$1</span>');
+            item.innerHTML = highlightedText;
+            
+            // Add click event
+            item.addEventListener('click', function() {
+              selectSuggestion(suggestion, input);
+            });
+            
+            dropdown.appendChild(item);
+          });
+
+          dropdown.classList.add('show');
+          currentHighlighted = -1;
+        }
+        
+        // Select a suggestion
+        function selectSuggestion(suggestion, input) {
+          input.value = suggestion;
+          document.getElementById('autocompleteDropdown').classList.remove('show');
+          performSearch();
+          input.focus();
+        }
+        
+        // Handle keyboard navigation
+        function handleKeyboardNavigation(event, input) {
+          const dropdown = document.getElementById('autocompleteDropdown');
+          const items = dropdown.querySelectorAll('.autocomplete-item');
+          
+          if (!dropdown.classList.contains('show') || items.length === 0) {
+            return;
+          }
+
+          switch(event.key) {
+            case 'ArrowDown':
+              event.preventDefault();
+              currentHighlighted = (currentHighlighted + 1) % items.length;
+              updateHighlight(items);
+              break;
+              
+            case 'ArrowUp':
+              event.preventDefault();
+              currentHighlighted = currentHighlighted <= 0 ? items.length - 1 : currentHighlighted - 1;
+              updateHighlight(items);
+              break;
+              
+            case 'Enter':
+              event.preventDefault();
+              if (currentHighlighted >= 0 && items[currentHighlighted]) {
+                const suggestion = items[currentHighlighted].textContent;
+                selectSuggestion(suggestion, input);
+              }
+              break;
+              
+            case 'Escape':
+              dropdown.classList.remove('show');
+              currentHighlighted = -1;
+              break;
+          }
+        }
+        
+        // Update highlighted item
+        function updateHighlight(items) {
+          items.forEach((item, index) => {
+            if (index === currentHighlighted) {
+              item.classList.add('highlighted');
+            } else {
+              item.classList.remove('highlighted');
+            }
+          });
+        }
+        
+        // Hide dropdown when clicking outside
+        function hideDropdownOnClickOutside(event) {
+          const searchContainer = document.querySelector('.search-container');
+          if (!searchContainer.contains(event.target)) {
+            document.getElementById('autocompleteDropdown').classList.remove('show');
+            currentHighlighted = -1;
+          }
+        }
+        
+        // Add input event for real-time search and autocomplete
+        searchInput.addEventListener('input', function() {
+          performSearch();
+          showAutocompleteSuggestions(this);
+        });
+        
+        // Add keyboard navigation
+        searchInput.addEventListener('keydown', function(event) {
+          handleKeyboardNavigation(event, this);
+          
+          // Clear search on Escape key when dropdown is not shown
+          if (event.key === 'Escape' && !document.getElementById('autocompleteDropdown').classList.contains('show')) {
+            this.value = '';
+            performSearch();
+          }
+        });
+        
+        // Add focus event to show suggestions if input has 3+ characters
+        searchInput.addEventListener('focus', function() {
+          if (this.value.length >= 3) {
+            showAutocompleteSuggestions(this);
+          }
+        });
+        
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', hideDropdownOnClickOutside);
+        
+        // Enter key search
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter' && !document.getElementById('autocompleteDropdown').classList.contains('show')) {
+            performSearch();
+          }
+        });
+        
+        // Clear search when input is empty
+        searchInput.addEventListener('input', function() {
+          if (this.value === '') {
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+              row.style.display = '';
+            });
+            centersTable.style.display = 'table';
+            noResults.style.display = 'none';
+          }
+        });
+        
+        // Modify button interactions
+        const modifyButtons = document.querySelectorAll('.modify-btn');
+        modifyButtons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            const row = this.closest('tr');
+            const centerName = row.querySelector('.document-name').textContent;
+            const serialNo = row.querySelector('.serial-no').textContent;
+            
+            console.log(`Modify Details clicked for: ${centerName} (Serial: ${serialNo})`);
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              this.style.transform = '';
+            }, 150);
+          });
+        });
+        
+        // Header button interactions
+        const headerButtons = document.querySelectorAll('.back-to-dashboard-btn, .back-to-home-btn');
+        headerButtons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            const isHome = this.classList.contains('back-to-home-btn');
+            console.log(`Header: ${isHome ? 'Back to Home' : 'Back to Dashboard'} clicked`);
+          });
+        });
+        
+        // Table row hover effects
+        const tableRows = document.querySelectorAll('.documents-table tbody tr');
+        tableRows.forEach(row => {
+          row.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.01)';
+          });
+          
+          row.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+          });
+        });
+        
+        // Search input focus effects
+        searchInput.addEventListener('focus', function() {
+          this.style.borderColor = '#8E44AD';
+          this.style.boxShadow = '0 0 0 3px rgba(142, 68, 173, 0.1)';
+          this.style.transform = 'translateY(-2px)';
+        });
+        
+        searchInput.addEventListener('blur', function() {
+          this.style.borderColor = '#e9ecef';
+          this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+          this.style.transform = 'translateY(0)';
+        });
+        
+        // Initialize page
+        console.log('Exam Center Details page loaded successfully');
+        console.log('Total exam Centers: ' + tableRows.length);
+      });
+    </script>
+  </body>
+</html>
