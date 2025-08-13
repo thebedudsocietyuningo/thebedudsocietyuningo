@@ -564,10 +564,6 @@
                 </div>
 
                 <div class="form-content">
-                    <div class="success-message" id="successMessage">
-                        <strong>Success!</strong> Your application has been submitted successfully. We will contact you soon with further details.
-                    </div>
-
                     <form id="applicationForm" novalidate>
                         <!-- Student Information -->
                         <div class="form-row">
@@ -669,9 +665,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label required-field" for="examCentre">Exam Centre Name</label>
-                                <input type="text" id="examCentre" name="examCentre" class="form-input" required>
-                                <div class="error-message" id="examCentreError">Please enter the exam centre name</div>
+                                <label class="form-label required-field" for="examcenter">Exam center Name</label>
+                                <input type="text" id="examcenter" name="examcenter" class="form-input" required>
+                                <div class="error-message" id="examcenterError">Please enter the exam center name</div>
                             </div>
                         </div>
 
@@ -718,7 +714,7 @@
 
                         <!-- Submit Button -->
                         <button type="submit" class="submit-button">
-                            🎓 Submit Application
+                            🎓 Submit Application... Kindly Wait
                         </button>
                     </form>
                 </div>
@@ -791,19 +787,107 @@
     <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
     <script>
+        // Application Form Configuration
+        const APPLICATION_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTDGm1JX2CD-toWM4UtFygC0g8ndO-4sYZkY1LruzqOi0OTfg5ReSL3mmjlpRIriVY/exec'; // Replace with your deployed Apps Script URL
+        
         // Form validation and submission
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('applicationForm');
+            const successMessage = document.getElementById('successMessage');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('paymentProof');
+            const mobileInput = document.getElementById('mobileNumber');
+
+            // Mobile number formatting
+            mobileInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                e.target.value = value;
+            });
+
+            // File upload area click handler
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // File upload change handler
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                    
+                    if (!allowedTypes.includes(file.type)) {
+                        showError('paymentProof', 'Please upload a valid file (JPG, PNG, or PDF)');
+                        return;
+                    }
+                    
+                    if (file.size > maxSize) {
+                        showError('paymentProof', 'File size should not exceed 5MB');
+                        return;
+                    }
+                    
+                    // Update UI to show file is selected
+                    const fileName = file.name;
+                    fileUploadArea.querySelector('.file-upload-text').textContent = `✅ ${fileName}`;
+                    fileUploadArea.querySelector('.file-upload-subtext').textContent = 'File selected successfully';
+                    fileUploadArea.classList.add('file-selected');
+                    clearError('paymentProof');
+                }
+            });
+
+            // Form submission handler
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Clear previous error messages
+                clearErrorMessages();
+                
+                let isValid = validateForm();
+                
+                if (isValid) {
+                    await submitApplicationForm();
+                }
+            });
+
+            // Real-time validation
+            const examModeCheckboxes = document.querySelectorAll('input[name="examMode"]');
+            examModeCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    clearError('examMode');
+                });
+            });
             
-            // Clear previous error messages
-            clearErrorMessages();
-            
+            // Clear error message when user starts typing
+            document.querySelectorAll('.form-input, .form-select').forEach(field => {
+                field.addEventListener('input', function() {
+                    clearError(this.id);
+                });
+            });
+
+            // Add animation on page load
+            window.addEventListener('load', function() {
+                const formContainer = document.querySelector('.form-container');
+                formContainer.style.opacity = '0';
+                formContainer.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    formContainer.style.transition = 'all 0.6s ease';
+                    formContainer.style.opacity = '1';
+                    formContainer.style.transform = 'translateY(0)';
+                }, 200);
+            });
+        });
+
+        // Form validation function
+        function validateForm() {
             let isValid = true;
             
             // Validate required text fields
             const requiredFields = [
                 'studentName', 'fatherName', 'address', 'district', 
-                'schoolName', 'class', 'language', 'dateOfBirth', 'examCentre'
+                'schoolName', 'class', 'language', 'dateOfBirth', 'examcenter'
             ];
             
             requiredFields.forEach(fieldId => {
@@ -850,54 +934,191 @@
                 }
             }
             
-            if (isValid) {
-                // Show success message
-                document.getElementById('successMessage').style.display = 'block';
-                // Scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                // Reset form
-                this.reset();
-                // Reset file upload area
-                resetFileUploadArea();
+            return isValid;
+        }
+
+        // Submit application form to Google Apps Script
+        async function submitApplicationForm() {
+            const submitButton = document.querySelector('.submit-button');
+            const originalText = submitButton.innerHTML;
+            
+            try {
+                // Update button state
+                submitButton.innerHTML = '⏳ Submitting Application...';
+                submitButton.disabled = true;
+                submitButton.style.opacity = '0.7';
+                
+                // Handle file upload with base64 conversion
+                const paymentProofFile = document.getElementById('paymentProof').files[0];
+                let paymentProofData = null;
+                let paymentProofFileName = '';
+                let paymentProofInfo = '';
+                
+                if (paymentProofFile) {
+                    paymentProofFileName = paymentProofFile.name;
+                    paymentProofInfo = `${paymentProofFile.name} (${(paymentProofFile.size / 1024 / 1024).toFixed(2)}MB)`;
+                    
+                    // Convert file to base64
+                    try {
+                        paymentProofData = await convertFileToBase64(paymentProofFile);
+                        console.log('✅ File converted to base64 successfully');
+                    } catch (fileError) {
+                        console.error('❌ Error converting file to base64:', fileError);
+                        throw new Error('Failed to process the uploaded file. Please try again.');
+                    }
+                }
+
+                // Get selected exam modes
+                const examModeChecked = document.querySelectorAll('input[name="examMode"]:checked');
+                const examModes = Array.from(examModeChecked).map(cb => cb.value);
+                
+                const formData = {
+                    formType: 'application',
+                    studentName: document.getElementById('studentName').value,
+                    fatherName: document.getElementById('fatherName').value,
+                    address: document.getElementById('address').value,
+                    district: document.getElementById('district').value,
+                    schoolName: document.getElementById('schoolName').value,
+                    class: document.getElementById('class').value,
+                    language: document.getElementById('language').value,
+                    examMode: examModes,
+                    dateOfBirth: document.getElementById('dateOfBirth').value,
+                    gender: document.getElementById('gender').value,
+                    mobileNumber: document.getElementById('mobileNumber').value,
+                    examcenter: document.getElementById('examcenter').value,
+                    paymentProof: paymentProofInfo,
+                    paymentProofFile: paymentProofData,
+                    paymentProofFileName: paymentProofFileName,
+                    ipAddress: await getUserIP(),
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
+                };
+
+                console.log('📤 Submitting application form data...');
+
+                // Submit to Google Apps Script
+                const response = await fetch(APPLICATION_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                console.log('📬 Response received:', result);
+
+                if (result.success) {
+                    // Show success message
+                    showApplicationNotification(result.message, 'success');
+                    
+                    // Reset form after delay
+                    setTimeout(() => {
+                        document.getElementById('applicationForm').reset();
+                        resetFileUploadArea();
+                        
+                        // Scroll to top
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 2000);
+                    
+                } else {
+                    throw new Error(result.message || 'Application submission failed');
+                }
+
+            } catch (error) {
+                console.error('❌ Error submitting application:', error);
+                showApplicationNotification(
+                    'Error submitting application: ' + (error.message || 'Please try again later'), 
+                    'error'
+                );
+            } finally {
+                // Reset button state
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                submitButton.style.opacity = '1';
             }
-        });
-        
-        // File upload handling
-        const fileInput = document.getElementById('paymentProof');
-        const uploadArea = document.getElementById('fileUploadArea');
-        
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                const fileName = this.files[0].name;
-                uploadArea.querySelector('.file-upload-text').textContent = `✅ ${fileName}`;
-                uploadArea.querySelector('.file-upload-subtext').textContent = 'File selected successfully';
-                uploadArea.classList.add('file-selected');
+        }
+
+        // Get user IP address
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.warn('Could not get IP address:', error);
+                return 'Unknown';
             }
-        });
-        
-        // Mobile number validation
-        document.getElementById('mobileNumber').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            if (this.value.length > 10) {
-                this.value = this.value.slice(0, 10);
-            }
-        });
-        
-        // Exam mode checkbox handling (allow multiple selections)
-        const examModeCheckboxes = document.querySelectorAll('input[name="examMode"]');
-        examModeCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                clearError('examMode');
+        }
+
+        // Convert file to base64
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Remove the data URL prefix to get just the base64 data
+                    const base64 = e.target.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = function(error) {
+                    reject(error);
+                };
+                reader.readAsDataURL(file);
             });
-        });
-        
-        // Clear error message when user starts typing
-        document.querySelectorAll('.form-input, .form-select').forEach(field => {
-            field.addEventListener('input', function() {
-                clearError(this.id);
-            });
-        });
-        
+        }
+
+        // Show notification messages for application form
+        function showApplicationNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'linear-gradient(45deg, #28a745, #20c997)' : 'linear-gradient(45deg, #dc3545, #c82333)'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                z-index: 10000;
+                font-weight: 600;
+                max-width: 400px;
+                word-wrap: break-word;
+                animation: slideIn 0.5s ease;
+            `;
+
+            // Add animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.5s ease reverse';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }, 5000);
+        }
+
+        // Utility functions
         function showError(fieldId, message) {
             const errorElement = document.getElementById(fieldId + 'Error');
             if (errorElement) {
@@ -917,26 +1138,14 @@
             document.querySelectorAll('.error-message').forEach(error => {
                 error.style.display = 'none';
             });
-            document.getElementById('successMessage').style.display = 'none';
         }
         
         function resetFileUploadArea() {
-            uploadArea.querySelector('.file-upload-text').textContent = '📤 Click to Upload Payment Screenshot';
-            uploadArea.querySelector('.file-upload-subtext').textContent = 'Supported formats: JPG, PNG, PDF (Max size: 5MB)';
-            uploadArea.classList.remove('file-selected');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            fileUploadArea.querySelector('.file-upload-text').textContent = '📤 Click to Upload Payment Screenshot';
+            fileUploadArea.querySelector('.file-upload-subtext').textContent = 'Supported formats: JPG, PNG, PDF (Max size: 5MB)';
+            fileUploadArea.classList.remove('file-selected');
         }
-        
-        // Add animation on page load
-        window.addEventListener('load', function() {
-            const formContainer = document.querySelector('.form-container');
-            formContainer.style.opacity = '0';
-            formContainer.style.transform = 'translateY(30px)';
-            setTimeout(() => {
-                formContainer.style.transition = 'all 0.6s ease';
-                formContainer.style.opacity = '1';
-                formContainer.style.transform = 'translateY(0)';
-            }, 200);
-        });
     </script>
 
     <script src="js/jquery.min.js"></script>
